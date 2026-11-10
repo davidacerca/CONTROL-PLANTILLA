@@ -1,4 +1,3 @@
-
 name: Publicar Acerca
 
 on:
@@ -30,6 +29,9 @@ jobs:
 
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
+        with:
+          # Habilita Pages si todavía no existe el sitio del repositorio.
+          enablement: true
 
       - name: Preparar archivos de Acerca
         uses: actions/upload-pages-artifact@v4
