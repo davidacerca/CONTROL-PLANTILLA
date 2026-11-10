@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Acerca · Gestión interna</title>
+<style>
+
+:root{
+  --bg:#f4f6fb;--white:#fff;--nav:#172338;--ink:#172033;--muted:#7b879a;--line:#e7ebf2;--accent:#5c50d4;--purple:#eeeaff;--green:#159b70;--greenbg:#e8f7f1;--amber:#bc791f;--amberbg:#fff4e5;--red:#cf5662;--redbg:#fff0f1;--blue:#397fc0;--bluebg:#edf6ff;--shadow:0 10px 28px rgba(30,43,68,.055);--r:16px}
+
+*{
+  box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select,textarea{
+  font:inherit}
+button{
+  cursor:pointer}
+.auth-screen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px;background:radial-gradient(circle at 15% 15%,#e8e7ff,transparent 35%),radial-gradient(circle at 90% 85%,#e7f2ff,transparent 32%),var(--bg)}
+.auth-card{
+  width:min(100%,430px);background:#fff;border:1px solid var(--line);border-radius:22px;padding:34px;box-shadow:0 24px 70px #1b27451f}
+.brand{
+  display:flex;align-items:center;gap:11px}
+.brandmark{
+  width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#9186ff,#5e52cf);display:grid;place-items:center;color:white;font-size:21px;font-weight:850}
+.brand strong{
+  display:block;font-size:20px}
+.brand small{
+  display:block;color:#8490a3;font-size:10px;letter-spacing:1.6px;margin-top:2px}
+.auth-card h1{
+  font-size:23px;margin:28px 0 6px}
+.sub{
+  color:var(--muted);font-size:13px}
+.field{
+  display:grid;gap:6px;margin:15px 0}
+.field label{
+  font-size:12px;font-weight:700;color:#39465b}
+.field input{
+  height:46px;border:1px solid #e0e6ef;border-radius:11px;padding:0 13px;outline:none}
+.field input:focus{
+  border-color:#786df0;box-shadow:0 0 0 3px #786df01c}
+.btn{
+  border:1px solid var(--line);background:#fff;color:#354158;padding:10px 14px;border-radius:10px;font-size:12px;font-weight:700}
+.btn.primary,.auth-submit{
+  background:var(--accent);border:1px solid var(--accent);color:white}
+.auth-submit{
+  width:100%;height:46px;border-radius:11px;font-weight:750;margin-top:8px}
+.auth-message{
+  display:none;margin-top:14px;border-radius:10px;padding:11px 12px;font-size:12px}
+.auth-message.error{
+  display:block;background:var(--redbg);color:#a83f4a}
+.auth-message.info{
+  display:block;background:var(--bluebg);color:#356c9d}
+.auth-foot{
+  border-top:1px solid #eef1f6;margin-top:22px;padding-top:16px;color:#8994a5;font-size:11px}
+.app{
+  display:none!important;min-height:100vh}
+body.acerca-authenticated .app{
+  display:flex!important}
+body.acerca-authenticated .auth-screen{
+  display:none!important}
+
+.sidebar{
+  width:250px;background:var(--nav);color:white;position:fixed;inset:0 auto 0 0;padding:23px 14px;display:flex;flex-direction:column;z-index:10;overflow:auto}
+.sidebrand{
+  padding:0 8px 24px}
+.sidebrand .brandmark{
+  width:38px;height:38px}
+.navlabel{
+  font-size:10px;color:#8290a8;letter-spacing:1.5px;text-transform:uppercase;padding:12px 11px 7px}
+.nav{
+  display:grid;gap:4px}
+.nav button{
+  border:0;background:transparent;color:#bbc5d4;text-align:left;padding:11px;border-radius:10px;display:flex;align-items:center;gap:11px;font-size:13px}
+.nav button:hover{
+  background:#ffffff12;color:white}
+.nav button.active{
+  background:#6c61d9;color:white}
+.nav button span{
+  width:19px;text-align:center;font-size:16px}
+.sidebottom{
+  margin-top:auto;border-top:1px solid #ffffff20;padding:15px 8px 0;font-size:12px}
+.sidebottom small{
+  display:block;color:#91a0b8;margin-top:3px}
+.main{
+  margin-left:250px;width:calc(100% - 250px);min-height:100vh}
+.topbar{
+  height:70px;background:#ffffffed;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:5}
+.crumb{
+  color:var(--muted);font-size:12px}
+.crumb b{
+  color:#29354a}
+.topright{
+  display:flex;align-items:center;gap:12px;font-size:12px;font-weight:700}
+.avatar{
+  width:31px;height:31px;display:grid;place-items:center;border-radius:50%;background:#dcd9ff;color:#4e45b2;font-weight:800}
+.signout-btn{
+  border:1px solid var(--line);background:white;color:#59657a;border-radius:9px;padding:8px 10px;font-size:11px;font-weight:700}
+.content{
+  max-width:1450px;margin:auto;padding:29px 32px 50px}
+.head{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.eyebrow{
+  color:var(--accent);font-size:10px;letter-spacing:1.6px;font-weight:800;margin-bottom:7px}
+.head h1{
+  font-size:25px;letter-spacing:-.7px;margin:0 0 5px}
+.head p{
+  margin:0;color:var(--muted);font-size:13px}
+.actions{
+  display:flex;gap:8px;flex-wrap:wrap}
+.grid{
+  display:grid;gap:15px}
+.stats{
+  grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:17px}
+.card{
+  background:white;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.stat{
+  padding:17px 18px}
+.stathead{
+  display:flex;justify-content:space-between;color:var(--muted);font-size:12px}
+.staticon{
+  width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--purple);color:var(--accent);font-size:16px}
+.value{
+  font-size:27px;font-weight:800;letter-spacing:-1px;margin:10px 0 2px}
+.foot{
+  font-size:11px;color:var(--muted)}
+.wide{
+  padding:17px 19px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.wide b{
+  font-size:12px}
+.wide small{
+  display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.tablewrap{
+  overflow:auto}
+.table{
+  width:100%;border-collapse:collapse;text-align:left}
+.table th{
+  background:#fafbfd;color:#8993a4;font-size:10px;text-transform:uppercase;letter-spacing:.7px;padding:13px 15px;border-bottom:1px solid var(--line);white-space:nowrap}
+.table td{
+  padding:13px 15px;border-bottom:1px solid #f0f2f6;font-size:12px;white-space:nowrap;color:#3a465c}
+.table tr:last-child td{
+  border-bottom:0}
+.pill{
+  display:inline-block;padding:5px 8px;border-radius:20px;font-size:10px;font-weight:750}
+.green{
+  background:var(--greenbg);color:var(--green)}
+.amber{
+  background:var(--amberbg);color:var(--amber)}
+.red{
+  background:var(--redbg);color:var(--red)}
+.blue{
+  background:var(--bluebg);color:var(--blue)}
+.gray{
+  background:#f0f2f5;color:#657187}
+.toolbar{
+  display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:13px}
+.toolbar input,.toolbar select{
+  height:38px;border:1px solid var(--line);border-radius:9px;padding:0 10px;background:white;color:#58647a}
+.range{
+  display:flex;gap:8px;align-items:end;flex-wrap:wrap}
+.range label{
+  font-size:10px;color:var(--muted);display:grid;gap:4px}
+.notice{
+  margin:13px 0;background:#f5f6ff;border:1px solid #e8e6ff;color:#6558b5;padding:11px 13px;border-radius:10px;font-size:11px}
+.panel{
+  padding:18px}
+.panel h3{
+  font-size:14px;margin:0 0 7px}
+.panel p{
+  color:var(--muted);font-size:12px;margin:0 0 12px}
+.calendar{
+  display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center}
+.calendar span{
+  padding:8px 0;color:#8994a5;font-size:10px}
+.calendar button{
+  border:0;border-radius:8px;padding:10px 0;background:#fff;color:#27354c;font-size:11px}
+.calendar button.hasvac{
+  background:#eeeaff;color:#5145c7;font-weight:800}
+.calendar button:hover{
+  outline:1px solid var(--accent)}
+.modalback{
+  display:none;position:fixed;inset:0;background:#10182a80;z-index:20;align-items:center;justify-content:center;padding:20px}
+.modalback.show{
+  display:flex}
+.modal{
+  background:white;border-radius:16px;width:min(600px,100%);max-height:90vh;overflow:auto;box-shadow:0 24px 80px #0b122455}
+.modalhead,.modalfoot{
+  padding:17px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.modalfoot{
+  border-top:1px solid var(--line);border-bottom:0;justify-content:flex-end;gap:8px}
+.modalbody{
+  padding:20px}
+.modalhead h2{
+  font-size:16px;margin:0}
+.close{
+  border:0;background:white;font-size:22px;color:#8994a5}
+.detailrow{
+  padding:12px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;font-size:12px}
+.toast{
+  position:fixed;right:20px;bottom:20px;background:#172338;color:white;padding:12px 16px;border-radius:10px;opacity:0;transition:.2s;z-index:30}
+.toast.show{
+  opacity:1}
+.mobilemenu{
+  display:none}
+
+@media(max-width:1000px){
+  .stats{
+  grid-template-columns:repeat(2,1fr)}
+}
