@@ -3,210 +3,1628 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Acerca · Gestión interna</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acerca | Gestión interna</title>
+
 <style>
-
-:root{
-  --bg:#f4f6fb;--white:#fff;--nav:#172338;--ink:#172033;--muted:#7b879a;--line:#e7ebf2;--accent:#5c50d4;--purple:#eeeaff;--green:#159b70;--greenbg:#e8f7f1;--amber:#bc791f;--amberbg:#fff4e5;--red:#cf5662;--redbg:#fff0f1;--blue:#397fc0;--bluebg:#edf6ff;--shadow:0 10px 28px rgba(30,43,68,.055);--r:16px}
-
-*{
-  box-sizing:border-box}
-body{
-  margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
-button,input,select,textarea{
-  font:inherit}
-button{
-  cursor:pointer}
-.auth-screen{
-  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px;background:radial-gradient(circle at 15% 15%,#e8e7ff,transparent 35%),radial-gradient(circle at 90% 85%,#e7f2ff,transparent 32%),var(--bg)}
-.auth-card{
-  width:min(100%,430px);background:#fff;border:1px solid var(--line);border-radius:22px;padding:34px;box-shadow:0 24px 70px #1b27451f}
-.brand{
-  display:flex;align-items:center;gap:11px}
-.brandmark{
-  width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#9186ff,#5e52cf);display:grid;place-items:center;color:white;font-size:21px;font-weight:850}
-.brand strong{
-  display:block;font-size:20px}
-.brand small{
-  display:block;color:#8490a3;font-size:10px;letter-spacing:1.6px;margin-top:2px}
-.auth-card h1{
-  font-size:23px;margin:28px 0 6px}
-.sub{
-  color:var(--muted);font-size:13px}
-.field{
-  display:grid;gap:6px;margin:15px 0}
-.field label{
-  font-size:12px;font-weight:700;color:#39465b}
-.field input{
-  height:46px;border:1px solid #e0e6ef;border-radius:11px;padding:0 13px;outline:none}
-.field input:focus{
-  border-color:#786df0;box-shadow:0 0 0 3px #786df01c}
-.btn{
-  border:1px solid var(--line);background:#fff;color:#354158;padding:10px 14px;border-radius:10px;font-size:12px;font-weight:700}
-.btn.primary,.auth-submit{
-  background:var(--accent);border:1px solid var(--accent);color:white}
-.auth-submit{
-  width:100%;height:46px;border-radius:11px;font-weight:750;margin-top:8px}
-.auth-message{
-  display:none;margin-top:14px;border-radius:10px;padding:11px 12px;font-size:12px}
-.auth-message.error{
-  display:block;background:var(--redbg);color:#a83f4a}
-.auth-message.info{
-  display:block;background:var(--bluebg);color:#356c9d}
-.auth-foot{
-  border-top:1px solid #eef1f6;margin-top:22px;padding-top:16px;color:#8994a5;font-size:11px}
-.app{
-  display:none!important;min-height:100vh}
-body.acerca-authenticated .app{
-  display:flex!important}
-body.acerca-authenticated .auth-screen{
-  display:none!important}
-
-.sidebar{
-  width:250px;background:var(--nav);color:white;position:fixed;inset:0 auto 0 0;padding:23px 14px;display:flex;flex-direction:column;z-index:10;overflow:auto}
-.sidebrand{
-  padding:0 8px 24px}
-.sidebrand .brandmark{
-  width:38px;height:38px}
-.navlabel{
-  font-size:10px;color:#8290a8;letter-spacing:1.5px;text-transform:uppercase;padding:12px 11px 7px}
-.nav{
-  display:grid;gap:4px}
-.nav button{
-  border:0;background:transparent;color:#bbc5d4;text-align:left;padding:11px;border-radius:10px;display:flex;align-items:center;gap:11px;font-size:13px}
-.nav button:hover{
-  background:#ffffff12;color:white}
-.nav button.active{
-  background:#6c61d9;color:white}
-.nav button span{
-  width:19px;text-align:center;font-size:16px}
-.sidebottom{
-  margin-top:auto;border-top:1px solid #ffffff20;padding:15px 8px 0;font-size:12px}
-.sidebottom small{
-  display:block;color:#91a0b8;margin-top:3px}
-.main{
-  margin-left:250px;width:calc(100% - 250px);min-height:100vh}
-.topbar{
-  height:70px;background:#ffffffed;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:5}
-.crumb{
-  color:var(--muted);font-size:12px}
-.crumb b{
-  color:#29354a}
-.topright{
-  display:flex;align-items:center;gap:12px;font-size:12px;font-weight:700}
-.avatar{
-  width:31px;height:31px;display:grid;place-items:center;border-radius:50%;background:#dcd9ff;color:#4e45b2;font-weight:800}
-.signout-btn{
-  border:1px solid var(--line);background:white;color:#59657a;border-radius:9px;padding:8px 10px;font-size:11px;font-weight:700}
-.content{
-  max-width:1450px;margin:auto;padding:29px 32px 50px}
-.head{
-  display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px}
-.eyebrow{
-  color:var(--accent);font-size:10px;letter-spacing:1.6px;font-weight:800;margin-bottom:7px}
-.head h1{
-  font-size:25px;letter-spacing:-.7px;margin:0 0 5px}
-.head p{
-  margin:0;color:var(--muted);font-size:13px}
-.actions{
-  display:flex;gap:8px;flex-wrap:wrap}
-.grid{
-  display:grid;gap:15px}
-.stats{
-  grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:17px}
-.card{
-  background:white;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
-.stat{
-  padding:17px 18px}
-.stathead{
-  display:flex;justify-content:space-between;color:var(--muted);font-size:12px}
-.staticon{
-  width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--purple);color:var(--accent);font-size:16px}
-.value{
-  font-size:27px;font-weight:800;letter-spacing:-1px;margin:10px 0 2px}
-.foot{
-  font-size:11px;color:var(--muted)}
-.wide{
-  padding:17px 19px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
-.wide b{
-  font-size:12px}
-.wide small{
-  display:block;color:var(--muted);font-size:11px;margin-top:3px}
-.tablewrap{
-  overflow:auto}
-.table{
-  width:100%;border-collapse:collapse;text-align:left}
-.table th{
-  background:#fafbfd;color:#8993a4;font-size:10px;text-transform:uppercase;letter-spacing:.7px;padding:13px 15px;border-bottom:1px solid var(--line);white-space:nowrap}
-.table td{
-  padding:13px 15px;border-bottom:1px solid #f0f2f6;font-size:12px;white-space:nowrap;color:#3a465c}
-.table tr:last-child td{
-  border-bottom:0}
-.pill{
-  display:inline-block;padding:5px 8px;border-radius:20px;font-size:10px;font-weight:750}
-.green{
-  background:var(--greenbg);color:var(--green)}
-.amber{
-  background:var(--amberbg);color:var(--amber)}
-.red{
-  background:var(--redbg);color:var(--red)}
-.blue{
-  background:var(--bluebg);color:var(--blue)}
-.gray{
-  background:#f0f2f5;color:#657187}
-.toolbar{
-  display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:13px}
-.toolbar input,.toolbar select{
-  height:38px;border:1px solid var(--line);border-radius:9px;padding:0 10px;background:white;color:#58647a}
-.range{
-  display:flex;gap:8px;align-items:end;flex-wrap:wrap}
-.range label{
-  font-size:10px;color:var(--muted);display:grid;gap:4px}
-.notice{
-  margin:13px 0;background:#f5f6ff;border:1px solid #e8e6ff;color:#6558b5;padding:11px 13px;border-radius:10px;font-size:11px}
-.panel{
-  padding:18px}
-.panel h3{
-  font-size:14px;margin:0 0 7px}
-.panel p{
-  color:var(--muted);font-size:12px;margin:0 0 12px}
-.calendar{
-  display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center}
-.calendar span{
-  padding:8px 0;color:#8994a5;font-size:10px}
-.calendar button{
-  border:0;border-radius:8px;padding:10px 0;background:#fff;color:#27354c;font-size:11px}
-.calendar button.hasvac{
-  background:#eeeaff;color:#5145c7;font-weight:800}
-.calendar button:hover{
-  outline:1px solid var(--accent)}
-.modalback{
-  display:none;position:fixed;inset:0;background:#10182a80;z-index:20;align-items:center;justify-content:center;padding:20px}
-.modalback.show{
-  display:flex}
-.modal{
-  background:white;border-radius:16px;width:min(600px,100%);max-height:90vh;overflow:auto;box-shadow:0 24px 80px #0b122455}
-.modalhead,.modalfoot{
-  padding:17px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
-.modalfoot{
-  border-top:1px solid var(--line);border-bottom:0;justify-content:flex-end;gap:8px}
-.modalbody{
-  padding:20px}
-.modalhead h2{
-  font-size:16px;margin:0}
-.close{
-  border:0;background:white;font-size:22px;color:#8994a5}
-.detailrow{
-  padding:12px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;font-size:12px}
-.toast{
-  position:fixed;right:20px;bottom:20px;background:#172338;color:white;padding:12px 16px;border-radius:10px;opacity:0;transition:.2s;z-index:30}
-.toast.show{
-  opacity:1}
-.mobilemenu{
-  display:none}
-
-@media(max-width:1000px){
-  .stats{
-  grid-template-columns:repeat(2,1fr)}
+:root {
+  --bg:#f4f6fb;
+  --white:#fff;
+  --nav:#172338;
+  --ink:#172033;
+  --muted:#7b879a;
+  --line:#e7ebf2;
+  --accent:#5c50d4;
+  --purple:#eeeaff;
+  --green:#159b70;
+  --greenbg:#e8f7f1;
+  --amber:#bc791f;
+  --amberbg:#fff4e5;
+  --red:#cf5662;
+  --redbg:#fff0f1;
+  --blue:#397fc0;
+  --bluebg:#edf6ff;
+  --shadow:0 10px 28px rgba(30,43,68,.055);
+  --radius:16px;
 }
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:14px/1.45 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+
+button,input,select,textarea { font:inherit; }
+button { cursor:pointer; }
+
+.auth-screen {
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  background:
+    radial-gradient(circle at 15% 15%,#e8e7ff,transparent 35%),
+    radial-gradient(circle at 90% 85%,#e7f2ff,transparent 32%),
+    var(--bg);
+}
+
+.auth-card {
+  width:min(100%,430px);
+  background:white;
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:34px;
+  box-shadow:0 24px 70px #1b27451f;
+}
+
+.brand { display:flex;align-items:center;gap:11px; }
+
+.brandmark {
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#9186ff,#5e52cf);
+  display:grid;
+  place-items:center;
+  color:white;
+  font-size:21px;
+  font-weight:850;
+}
+
+.brand strong { display:block;font-size:20px; }
+
+.brand small {
+  display:block;
+  color:#8490a3;
+  font-size:10px;
+  letter-spacing:1.6px;
+  margin-top:2px;
+}
+
+.auth-card h1 { font-size:23px;margin:28px 0 6px; }
+.sub { color:var(--muted);font-size:13px; }
+
+.field { display:grid;gap:6px;margin:15px 0; }
+
+.field label {
+  font-size:12px;
+  font-weight:700;
+  color:#39465b;
+}
+
+.field input,.field select,.field textarea {
+  width:100%;
+  border:1px solid #e0e6ef;
+  border-radius:11px;
+  padding:12px;
+  outline:none;
+  background:white;
+}
+
+.field input:focus,.field select:focus,.field textarea:focus {
+  border-color:#786df0;
+  box-shadow:0 0 0 3px #786df01c;
+}
+
+.btn {
+  border:1px solid var(--line);
+  background:white;
+  color:#354158;
+  padding:10px 14px;
+  border-radius:10px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.btn.primary,.auth-submit {
+  background:var(--accent);
+  border:1px solid var(--accent);
+  color:white;
+}
+
+.btn:disabled { opacity:.5;cursor:not-allowed; }
+
+.auth-submit {
+  width:100%;
+  height:46px;
+  border-radius:11px;
+  font-weight:750;
+  margin-top:8px;
+}
+
+.auth-message {
+  display:none;
+  margin-top:14px;
+  border-radius:10px;
+  padding:11px 12px;
+  font-size:12px;
+}
+
+.auth-message.error { display:block;background:var(--redbg);color:#a83f4a; }
+.auth-message.info { display:block;background:var(--bluebg);color:#356c9d; }
+
+.auth-foot {
+  border-top:1px solid #eef1f6;
+  margin-top:22px;
+  padding-top:16px;
+  color:#8994a5;
+  font-size:11px;
+}
+
+.app { display:none!important;min-height:100vh; }
+
+body.acerca-authenticated .app { display:flex!important; }
+body.acerca-authenticated .auth-screen { display:none!important; }
+
+.sidebar {
+  width:250px;
+  background:var(--nav);
+  color:white;
+  position:fixed;
+  inset:0 auto 0 0;
+  padding:23px 14px;
+  display:flex;
+  flex-direction:column;
+  z-index:10;
+  overflow:auto;
+}
+
+.sidebrand { padding:0 8px 24px; }
+.sidebrand .brandmark { width:38px;height:38px; }
+
+.navlabel {
+  font-size:10px;
+  color:#8290a8;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  padding:12px 11px 7px;
+}
+
+.nav { display:grid;gap:4px; }
+
+.nav button {
+  border:0;
+  background:transparent;
+  color:#bbc5d4;
+  text-align:left;
+  padding:11px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  font-size:13px;
+}
+
+.nav button:hover { background:#ffffff12;color:white; }
+.nav button.active { background:#6c61d9;color:white; }
+
+.nav button svg {
+  width:18px;
+  height:18px;
+  flex-shrink:0;
+}
+
+.sidebottom {
+  margin-top:auto;
+  border-top:1px solid #ffffff20;
+  padding:15px 8px 0;
+  font-size:12px;
+}
+
+.sidebottom small {
+  display:block;
+  color:#91a0b8;
+  margin-top:3px;
+  overflow-wrap:anywhere;
+}
+
+.main {
+  margin-left:250px;
+  width:calc(100% - 250px);
+  min-height:100vh;
+}
+
+.topbar {
+  height:70px;
+  background:#ffffffed;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 30px;
+  position:sticky;
+  top:0;
+  z-index:5;
+}
+
+.crumb { color:var(--muted);font-size:12px; }
+.crumb b { color:#29354a; }
+
+.topright {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.avatar {
+  width:31px;
+  height:31px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#dcd9ff;
+  color:#4e45b2;
+  font-weight:800;
+}
+
+.signout-btn {
+  border:1px solid var(--line);
+  background:white;
+  color:#59657a;
+  border-radius:9px;
+  padding:8px 10px;
+  font-size:11px;
+  font-weight:700;
+}
+
+.content {
+  max-width:1450px;
+  margin:auto;
+  padding:29px 32px 50px;
+}
+
+.head {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-bottom:22px;
+}
+
+.eyebrow {
+  color:var(--accent);
+  font-size:10px;
+  letter-spacing:1.6px;
+  font-weight:800;
+  margin-bottom:7px;
+}
+
+.head h1 { font-size:25px;letter-spacing:-.7px;margin:0 0 5px; }
+.head p { margin:0;color:var(--muted);font-size:13px; }
+.actions { display:flex;gap:8px;flex-wrap:wrap; }
+
+.grid { display:grid;gap:15px; }
+.stats { grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:17px; }
+
+.card {
+  background:white;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+
+.stat { padding:17px 18px; }
+
+.stathead {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.staticon {
+  width:34px;
+  height:34px;
+  border-radius:11px;
+  display:grid;
+  place-items:center;
+  background:var(--purple);
+  color:var(--accent);
+  font-size:16px;
+}
+
+.staticon svg { width:19px;height:19px; }
+
+.value { font-size:27px;font-weight:800;letter-spacing:-1px;margin:10px 0 2px; }
+.foot { font-size:11px;color:var(--muted); }
+
+.clickable { cursor:pointer;transition:.15s; }
+.clickable:hover { border-color:#bdb5ff;transform:translateY(-2px); }
+
+.wide {
+  padding:17px 19px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:16px;
+}
+
+.wide b { font-size:12px; }
+.wide small { display:block;color:var(--muted);font-size:11px;margin-top:3px; }
+
+.tablewrap { overflow:auto; }
+.table { width:100%;border-collapse:collapse;text-align:left; }
+
+.table th {
+  background:#fafbfd;
+  color:#8993a4;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+  padding:13px 15px;
+  border-bottom:1px solid var(--line);
+  white-space:nowrap;
+}
+
+.table td {
+  padding:13px 15px;
+  border-bottom:1px solid #f0f2f6;
+  font-size:12px;
+  color:#3a465c;
+}
+
+.table tr:last-child td { border-bottom:0; }
+
+.empty-state {
+  text-align:center;
+  padding:35px 20px!important;
+  color:var(--muted)!important;
+  white-space:normal!important;
+}
+
+.empty-icon {
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  margin:0 auto 10px;
+  border-radius:13px;
+  background:var(--purple);
+  color:var(--accent);
+  font-size:19px;
+}
+
+.pill {
+  display:inline-block;
+  padding:5px 8px;
+  border-radius:20px;
+  font-size:10px;
+  font-weight:750;
+}
+
+.green { background:var(--greenbg);color:var(--green); }
+.amber { background:var(--amberbg);color:var(--amber); }
+.red { background:var(--redbg);color:var(--red); }
+.blue { background:var(--bluebg);color:var(--blue); }
+.gray { background:#f0f2f5;color:#657187; }
+
+.toolbar {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:13px;
+}
+
+.range {
+  display:flex;
+  gap:8px;
+  align-items:end;
+  flex-wrap:wrap;
+}
+
+.range label {
+  font-size:10px;
+  color:var(--muted);
+  display:grid;
+  gap:4px;
+}
+
+.range input {
+  height:38px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:0 10px;
+  background:white;
+  color:#58647a;
+}
+
+.notice {
+  margin:13px 0;
+  background:#f5f6ff;
+  border:1px solid #e8e6ff;
+  color:#6558b5;
+  padding:11px 13px;
+  border-radius:10px;
+  font-size:11px;
+}
+
+.panel { padding:18px; }
+.panel h3 { font-size:14px;margin:0 0 7px; }
+.panel p { color:var(--muted);font-size:12px;margin:0 0 12px; }
+
+.calendar {
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:5px;
+  text-align:center;
+}
+
+.calendar span {
+  padding:8px 0;
+  color:#8994a5;
+  font-size:10px;
+}
+
+.calendar button {
+  border:0;
+  border-radius:8px;
+  padding:10px 0;
+  background:#fff;
+  color:#27354c;
+  font-size:11px;
+}
+
+.calendar button.hasvac {
+  background:#eeeaff;
+  color:#5145c7;
+  font-weight:800;
+}
+
+.calendar button:hover { outline:1px solid var(--accent); }
+
+.modalback {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#10182a80;
+  z-index:20;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.modalback.show { display:flex; }
+
+.modal {
+  background:white;
+  border-radius:16px;
+  width:min(650px,100%);
+  max-height:90vh;
+  overflow:auto;
+  box-shadow:0 24px 80px #0b122455;
+}
+
+.modalhead,.modalfoot {
+  padding:17px 20px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.modalfoot {
+  border-top:1px solid var(--line);
+  border-bottom:0;
+  justify-content:flex-end;
+  gap:8px;
+}
+
+.modalbody { padding:20px; }
+.modalhead h2 { font-size:16px;margin:0; }
+
+.close {
+  border:0;
+  background:white;
+  font-size:22px;
+  color:#8994a5;
+}
+
+.detailrow {
+  padding:12px 0;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  font-size:12px;
+}
+
+.toast {
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  background:#172338;
+  color:white;
+  padding:12px 16px;
+  border-radius:10px;
+  opacity:0;
+  transition:.2s;
+  z-index:30;
+  pointer-events:none;
+}
+
+.toast.show { opacity:1; }
+.mobilemenu { display:none; }
+
+@media(max-width:1100px) {
+  .stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+
+@media(max-width:700px) {
+  .sidebar {
+    width:260px;
+    transform:translateX(-100%);
+    transition:.2s;
+  }
+
+  .sidebar.open { transform:translateX(0); }
+
+  .main { margin:0;width:100%; }
+  .mobilemenu { display:inline-flex; }
+  .topbar { padding:0 15px; }
+  .content { padding:20px 14px; }
+  .stats { grid-template-columns:1fr 1fr; }
+  .head { display:block; }
+  .actions { margin-top:13px; }
+  .topright #currentAdminEmail { display:none; }
+}
+
+@media(max-width:420px) {
+  .stats { grid-template-columns:1fr; }
+  .auth-card { padding:25px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ACCESO -->
+<div class="auth-screen" id="authScreen">
+  <main class="auth-card">
+    <div class="brand">
+      <div class="brandmark">A</div>
+      <div>
+        <strong>Acerca</strong>
+        <small>GESTIÓN INTERNA</small>
+      </div>
+    </div>
+
+    <h1>Acceso a la plataforma</h1>
+    <p class="sub">Introduce tus credenciales de administración para continuar.</p>
+
+    <form id="loginForm">
+      <div class="field">
+        <label for="loginEmail">Correo electrónico</label>
+        <input id="loginEmail" type="email" autocomplete="username"
+          placeholder="administracion@empresa.com" required>
+      </div>
+
+      <div class="field">
+        <label for="loginPassword">Contraseña</label>
+        <input id="loginPassword" type="password"
+          autocomplete="current-password" required>
+      </div>
+
+      <button class="auth-submit" id="loginButton" type="submit">
+        Iniciar sesión
+      </button>
+
+      <div class="auth-message" id="authMessage"
+        role="status" aria-live="polite"></div>
+    </form>
+
+    <div class="auth-foot">
+      Acceso restringido a usuarios autorizados por Acerca.
+      No existe registro público.
+    </div>
+  </main>
+</div>
+
+<!-- APLICACIÓN -->
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebrand">
+      <div class="brand">
+        <div class="brandmark">A</div>
+        <div>
+          <strong>Acerca</strong>
+          <small>GESTIÓN INTERNA</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="navlabel">General</div>
+
+    <nav class="nav" id="mainNav">
+      <button class="active" data-page="inicio">
+        <span>▦</span>Inicio
+      </button>
+      <button data-page="trabajadores">
+        <span>♙</span>Trabajadores
+      </button>
+
+      <div class="navlabel">Gestión laboral</div>
+
+      <button data-page="vacaciones">
+        <span>▣</span>Vacaciones
+      </button>
+      <button data-page="permisos">
+        <span>▤</span>Permisos y ausencias
+      </button>
+      <button data-page="incidencias">
+        <span>◷</span>Impuntualidades y abandonos
+      </button>
+
+      <div class="navlabel">Gestión económica</div>
+
+      <button data-page="partners">
+        <span>♧</span>Partners
+      </button>
+      <button data-page="horas">
+        <span>◴</span>Horas extra
+      </button>
+      <button data-page="pagos">
+        <span>▤</span>Pagos adicionales
+      </button>
+      <button data-page="pendientes">
+        <span>▣</span>Pagos pendientes
+      </button>
+      <button data-page="bonos">
+        <span>✧</span>Bonos de asistencia
+      </button>
+
+      <div class="navlabel">Sistema</div>
+
+      <button data-page="configuracion">
+        <span>⚙</span>Configuración
+      </button>
+    </nav>
+
+    <div class="sidebottom">
+      <b>Administración</b>
+      <small id="sidebarAdminEmail">Sesión autorizada</small>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:10px">
+        <button class="btn mobilemenu" id="mobileMenu">☰</button>
+        <div class="crumb">Acerca / <b id="crumb">Inicio</b></div>
+      </div>
+
+      <div class="topright">
+        <div class="avatar">AD</div>
+        <span id="currentAdminEmail">Administración</span>
+        <button id="logoutButton" class="signout-btn" type="button">
+          Cerrar sesión
+        </button>
+      </div>
+    </header>
+
+    <section class="content" id="view"></section>
+  </main>
+</div>
+
+<!-- VENTANAS MODALES -->
+<div class="modalback" id="modal">
+  <div class="modal">
+    <div class="modalhead">
+      <h2 id="modalTitle">Detalle</h2>
+      <button class="close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modalbody" id="modalBody"></div>
+    <div class="modalfoot">
+      <button class="btn" onclick="closeModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================
+   DATOS INICIALES
+   IMPORTANTE: NO HAY TRABAJADORES NI MOVIMIENTOS FICTICIOS.
+   ===================================================== */
+
+const workers = [];
+const vacations = [];
+const leaves = [];
+const incidents = [];
+const partners = [];
+const extraHours = [];
+const additionalPayments = [];
+const pendingPayments = [];
+
+const leaveTypes = [
+  'Hospitalización',
+  'Mudanza',
+  'Fallecimiento',
+  'Paternidad / maternidad',
+  'Deber inexcusable',
+  'Matrimonio propio',
+  'Matrimonio de terceros',
+  'Fuerza mayor',
+  'Horas médicas',
+  'Juicio',
+  'Ausencia justificada no retribuida',
+  'Ausencia injustificada',
+  'Baja médica'
+];
+
+const titles = {
+  inicio:'Inicio',
+  trabajadores:'Trabajadores',
+  vacaciones:'Vacaciones',
+  permisos:'Permisos y ausencias',
+  incidencias:'Impuntualidades y abandonos',
+  partners:'Partners',
+  horas:'Horas extra',
+  pagos:'Pagos adicionales',
+  pendientes:'Pagos pendientes',
+  bonos:'Bonos de asistencia',
+  configuracion:'Configuración'
+};
+
+let currentPage = 'inicio';
+let activeFilters = {};
+
+/* =====================================================
+   FUNCIONES GENERALES
+   ===================================================== */
+
+function icon(symbol) {
+  const icons = {
+    users:'♙',
+    vacation:'☼',
+    clock:'◷',
+    euro:'€',
+    alert:'!',
+    calendar:'▣',
+    file:'▤',
+    partner:'♧',
+    settings:'⚙',
+    check:'✓'
+  };
+
+  return `<span>${icons[symbol] || '•'}</span>`;
+}
+
+function pageHeader(section,title,description,actions='') {
+  return `
+    <div class="head">
+      <div>
+        <div class="eyebrow">${section}</div>
+        <h1>${title}</h1>
+        <p>${description}</p>
+      </div>
+      <div class="actions">${actions}</div>
+    </div>
+  `;
+}
+
+function statCard(title,value,description,symbol='clock',click='') {
+  return `
+    <div class="card stat ${click ? 'clickable' : ''}"
+      ${click ? `role="button" tabindex="0" onclick="${click}"` : ''}>
+      <div class="stathead">
+        <span>${title}</span>
+        <span class="staticon">${icon(symbol)}</span>
+      </div>
+      <div class="value">${value}</div>
+      <div class="foot">${description}</div>
+    </div>
+  `;
+}
+
+function emptyTable(headers,message='Todavía no hay registros.') {
+  return `
+    <div class="card tablewrap">
+      <table class="table">
+        <thead>
+          <tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="${headers.length}" class="empty-state">
+              <div class="empty-icon">▤</div>
+              <strong>${message}</strong>
+              <br>
+              Los registros aparecerán aquí cuando se incorporen.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function dateFormat(date) {
+  return [
+    String(date.getDate()).padStart(2,'0'),
+    String(date.getMonth()+1).padStart(2,'0'),
+    date.getFullYear()
+  ].join('/');
+}
+
+function dateInputFormat(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth()+1).padStart(2,'0');
+  const d = String(date.getDate()).padStart(2,'0');
+  return `${y}-${m}-${d}`;
+}
+
+function renderDateFilter(key) {
+  const now = new Date();
+  const start = new Date(now.getFullYear(),now.getMonth(),1);
+
+  return `
+    <form class="toolbar range"
+      onsubmit="applyDateFilter(event,'${key}')">
+
+      <label>Desde
+        <input type="date" id="from-${key}"
+          value="${dateInputFormat(start)}" required>
+      </label>
+
+      <label>Hasta
+        <input type="date" id="to-${key}"
+          value="${dateInputFormat(now)}" required>
+      </label>
+
+      <button class="btn" type="submit">Aplicar filtro</button>
+      <button class="btn" type="button"
+        onclick="resetDateFilter('${key}')">Restablecer</button>
+    </form>
+  `;
+}
+
+function applyDateFilter(event,key) {
+  event.preventDefault();
+
+  const from = document.getElementById('from-'+key).value;
+  const to = document.getElementById('to-'+key).value;
+
+  if (!from || !to || from > to) {
+    showToast('Comprueba el intervalo de fechas.');
+    return;
+  }
+
+  activeFilters[key] = {from,to};
+
+  showToast('Intervalo seleccionado: '+from+' a '+to);
+}
+
+function resetDateFilter(key) {
+  delete activeFilters[key];
+  render();
+  showToast('Filtro restablecido.');
+}
+
+function showToast(message) {
+  const element = document.getElementById('toast');
+  element.textContent = message;
+  element.classList.add('show');
+
+  setTimeout(()=>element.classList.remove('show'),2800);
+}
+
+function openModal(title,content) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').innerHTML = content;
+  document.getElementById('modal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+}
+
+function emptyModalMessage(message) {
+  return `
+    <div style="text-align:center;padding:20px 5px">
+      <div class="empty-icon">▤</div>
+      <strong>${message}</strong>
+      <p class="sub">Todavía no existen registros en este apartado.</p>
+    </div>
+  `;
+}
+
+/* =====================================================
+   VACACIONES PRÓXIMAS
+   ===================================================== */
+
+function nextWeekRange() {
+  const today = new Date();
+  const start = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
+
+  let difference = (8-start.getDay())%7;
+  if (difference === 0) difference = 7;
+
+  start.setDate(start.getDate()+difference);
+
+  const end = new Date(start);
+  end.setDate(end.getDate()+6);
+
+  return {start,end};
+}
+
+function showUpcomingVacations() {
+  const {start,end} = nextWeekRange();
+
+  const heading =
+    dateFormat(start)+' al '+dateFormat(end);
+
+  const matching = vacations.filter(v => {
+    const from = new Date(v.start);
+    const to = new Date(v.end);
+    return from <= end && to >= start;
+  });
+
+  let content;
+
+  if (!matching.length) {
+    content = emptyModalMessage(
+      'No hay vacaciones programadas para esta semana.'
+    );
+  } else {
+    content = matching.map(v=>`
+      <div class="detailrow">
+        <span>
+          <b>${v.worker}</b><br>
+          ${dateFormat(new Date(v.start))} al
+          ${dateFormat(new Date(v.end))}
+        </span>
+        <span class="pill blue">Vacaciones</span>
+      </div>
+    `).join('');
+  }
+
+  openModal('Vacaciones próximas · '+heading,content);
+}
+
+/* =====================================================
+   CALENDARIO DE VACACIONES
+   ===================================================== */
+
+function showCalendarDay(day) {
+  const date = new Date(
+    calendarYear,
+    calendarMonth,
+    day
+  );
+
+  const matching = vacations.filter(v => {
+    const from = new Date(v.start);
+    const to = new Date(v.end);
+    return date >= from && date <= to;
+  });
+
+  const content = matching.length
+    ? matching.map(v=>`
+        <div class="detailrow">
+          <b>${v.worker}</b>
+          <span>Vacaciones</span>
+        </div>
+      `).join('')
+    : emptyModalMessage('No hay vacaciones registradas este día.');
+
+  openModal('Vacaciones · '+dateFormat(date),content);
+}
+
+let calendarYear = new Date().getFullYear();
+let calendarMonth = new Date().getMonth();
+
+function renderCalendar() {
+  const first = new Date(calendarYear,calendarMonth,1);
+  const lastDay = new Date(calendarYear,calendarMonth+1,0).getDate();
+
+  const offset = (first.getDay()+6)%7;
+
+  const days = [];
+
+  for (let i=0;i<offset;i++) {
+    days.push('<span></span>');
+  }
+
+  for (let day=1;day<=lastDay;day++) {
+    const date = new Date(calendarYear,calendarMonth,day);
+
+    const hasVacation = vacations.some(v => {
+      return date >= new Date(v.start) &&
+             date <= new Date(v.end);
+    });
+
+    const details = hasVacation
+      ? 'Hay vacaciones registradas'
+      : 'No hay vacaciones registradas';
+
+    days.push(`
+      <button
+        class="${hasVacation?'hasvac':''}"
+        title="${details}"
+        onclick="showCalendarDay(${day})">
+        ${day}
+      </button>
+    `);
+  }
+
+  const monthName = first.toLocaleDateString('es-ES',{
+    month:'long',
+    year:'numeric'
+  });
+
+  return `
+    <div class="card panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+        <h3 style="margin:0;text-transform:capitalize">${monthName}</h3>
+        <div style="display:flex;gap:5px">
+          <button class="btn" onclick="changeCalendar(-1)">‹</button>
+          <button class="btn" onclick="changeCalendar(1)">›</button>
+        </div>
+      </div>
+
+      <div class="calendar">
+        ${['L','M','X','J','V','S','D'].map(x=>`<span>${x}</span>`).join('')}
+        ${days.join('')}
+      </div>
+
+      <p class="foot" style="margin-top:15px">
+        Selecciona un día para consultar las vacaciones.
+      </p>
+    </div>
+  `;
+}
+
+function changeCalendar(direction) {
+  calendarMonth += direction;
+
+  if (calendarMonth > 11) {
+    calendarMonth=0;
+    calendarYear++;
+  }
+
+  if (calendarMonth < 0) {
+    calendarMonth=11;
+    calendarYear--;
+  }
+
+  render();
+}
+
+/* =====================================================
+   RESÚMENES INDIVIDUALES
+   ===================================================== */
+
+function showIndividualSummary(type) {
+  const matching = leaves.filter(x=>x.type===type);
+
+  if (!matching.length) {
+    openModal(type,emptyModalMessage(
+      'No hay registros de '+type.toLowerCase()+'.'
+    ));
+    return;
+  }
+
+  openModal(type,matching.map(x=>`
+    <div class="detailrow">
+      <b>${x.worker}</b>
+      <span>${x.amount}</span>
+    </div>
+  `).join(''));
+}
+
+/* =====================================================
+   RESÚMENES SEMANALES DE INCIDENCIAS
+   ===================================================== */
+
+function getMonthWeeks() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+
+  const first = new Date(year,month,1);
+  const last = new Date(year,month+1,0);
+
+  const firstDay = new Date(first);
+  firstDay.setDate(firstDay.getDate()-((firstDay.getDay()+6)%7));
+
+  const weeks = [];
+  const cursor = new Date(firstDay);
+
+  while (cursor <= last) {
+    const start = new Date(cursor);
+    const end = new Date(cursor);
+    end.setDate(end.getDate()+6);
+
+    const label = dateFormat(start)+' al '+dateFormat(end);
+
+    const punctualities = incidents.filter(x=>
+      x.type==='Impuntualidad' &&
+      new Date(x.date)>=start &&
+      new Date(x.date)<=end
+    ).length;
+
+    const abandonments = incidents.filter(x=>
+      x.type==='Abandono de puesto' &&
+      new Date(x.date)>=start &&
+      new Date(x.date)<=end
+    ).length;
+
+    weeks.push({label,punctualities,abandonments});
+
+    cursor.setDate(cursor.getDate()+7);
+  }
+
+  return weeks;
+}
+
+function renderIncidentSummary() {
+  return getMonthWeeks().map((week,index)=>`
+    <div class="card stat">
+      <div class="stathead">
+        <span>Semana ${index+1}</span>
+        <span class="staticon">${icon('clock')}</span>
+      </div>
+      <div class="value">${week.punctualities+week.abandonments}</div>
+      <div class="foot">${week.punctualities} impuntualidades ·
+        ${week.abandonments} abandonos</div>
+      <div class="foot" style="margin-top:6px">${week.label}</div>
+    </div>
+  `).join('');
+}
+
+/* =====================================================
+   FORMULARIOS VISUALES
+   TODAVÍA NO GUARDAN INFORMACIÓN EN SUPABASE.
+   ===================================================== */
+
+function showNewWorker() {
+  openModal('Nuevo trabajador',`
+    <p class="sub">Datos de la nueva ficha.</p>
+
+    <div class="field">
+      <label>Nombre y apellidos</label>
+      <input placeholder="Nombre del trabajador">
+    </div>
+
+    <div class="field">
+      <label>Sociedad</label>
+      <select>
+        <option value="">Seleccionar sociedad</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Mail corporativo</label>
+      <input type="email" placeholder="trabajador@empresa.com">
+    </div>
+
+    <div class="field">
+      <label>Fecha de alta</label>
+      <input type="date">
+    </div>
+
+    <div class="field">
+      <label>Fecha de baja</label>
+      <input type="date">
+    </div>
+
+    <div class="field">
+      <label>Motivo de finalización</label>
+      <textarea rows="3"></textarea>
+    </div>
+
+    <div class="notice">
+      El formulario se conectará a Supabase en la siguiente fase.
+      Todavía no guarda datos.
+    </div>
+  `);
+}
+
+function showExcelImport() {
+  openModal('Importación masiva de trabajadores',`
+    <p>La plantilla Excel tendrá estas columnas, respetando el orden:</p>
+    <div class="detailrow"><b>AGENTE</b><span>Nombre</span></div>
+    <div class="detailrow"><b>SOCIEDAD</b><span>Empresa</span></div>
+    <div class="detailrow"><b>MAIL</b><span>Correo corporativo</span></div>
+    <div class="detailrow"><b>FECHA ALTA</b><span>Fecha de incorporación</span></div>
+    <div class="detailrow"><b>FECHA DE BAJA</b><span>Fecha de finalización</span></div>
+
+    <div class="notice">
+      La lectura, validación y guardado del Excel se implementarán
+      cuando conectemos la tabla de trabajadores.
+    </div>
+  `);
+}
+
+function showNewRecord(type) {
+  openModal(type,`
+    <p class="sub">
+      Aquí se incorporará el formulario de registro de ${type.toLowerCase()}.
+    </p>
+    <div class="notice">
+      El almacenamiento se activará al conectar este módulo con Supabase.
+    </div>
+  `);
+}
+
+/* =====================================================
+   TABLAS VACÍAS
+   ===================================================== */
+
+function emptyModuleTable(headers,message) {
+  return `
+    <div class="card tablewrap">
+      <table class="table">
+        <thead>
+          <tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="${headers.length}" class="empty-state">
+              <div class="empty-icon">▤</div>
+              <strong>${message}</strong>
+              <br>
+              No existen movimientos registrados.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+/* =====================================================
+   CONFIGURACIÓN DE PÁGINAS
+   ===================================================== */
+
+function pageContent() {
+
+  switch(currentPage) {
+
+    case 'inicio': {
+      const next = nextWeekRange();
+
+      return pageHeader(
+        'RESUMEN GENERAL',
+        'Bienvenido a Acerca',
+        'Aquí aparecerá el estado de la gestión interna de tu equipo.'
+      )+`
+        <div class="grid stats">
+          ${statCard('Trabajadores activos','0','Sin trabajadores registrados','users')}
+          ${statCard(
+            'Vacaciones próximas',
+            '0',
+            'Semana del '+dateFormat(next.start)+' al '+dateFormat(next.end),
+            'vacation',
+            'showUpcomingVacations()'
+          )}
+          ${statCard('Incidencias este mes','0','Sin incidencias registradas','clock')}
+          ${statCard('Pagos pendientes','0 €','Sin pagos pendientes','euro')}
+          ${statCard('Bonos de asistencia perdidos','0','Sin trabajadores registrados','alert')}
+        </div>
+
+        <div class="card wide">
+          <div>
+            <b>Bono de asistencia · 200 €</b>
+            <small>
+              Se controla individualmente. Se excluyen los permisos retribuidos.
+            </small>
+          </div>
+          <button class="btn" onclick="go('bonos')">Ver bonos →</button>
+        </div>
+
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr))">
+          ${[
+            ['Trabajadores','trabajadores'],
+            ['Vacaciones','vacaciones'],
+            ['Permisos y ausencias','permisos'],
+            ['Pagos pendientes','pendientes']
+          ].map(x=>`
+            <button class="card wide" onclick="go('${x[1]}')">
+              <b>${x[0]}</b><span>→</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    case 'trabajadores':
+      return pageHeader(
+        'GENERAL',
+        'Trabajadores',
+        'Gestiona las fichas y los datos básicos de la plantilla.',
+        `
+          <button class="btn" onclick="showExcelImport()">
+            Importar Excel
+          </button>
+          <button class="btn primary" onclick="showNewWorker()">
+            + Nuevo trabajador
+          </button>
+        `
+      )+
+      renderDateFilter('workers')+
+      emptyModuleTable(
+        ['Agente','Sociedad','Mail','Fecha alta','Fecha baja'],
+        'Todavía no hay trabajadores registrados.'
+      );
+
+    case 'vacaciones':
+      return pageHeader(
+        'GESTIÓN LABORAL',
+        'Vacaciones',
+        'Consulta semanas completas, días sueltos y próximos periodos.'
+      )+`
+        <div class="grid stats">
+          ${statCard('Asignación anual','32 días','28 días en semanas + 4 sueltos','vacation')}
+          ${statCard('Días disfrutados','0','Sin registros','check')}
+          ${statCard('Vacaciones próximas','0','Sin vacaciones registradas','clock')}
+          ${statCard('Trabajadores','0','Sin trabajadores registrados','users')}
+        </div>
+
+        ${renderDateFilter('vacations')}
+
+        <div class="grid" style="grid-template-columns:1.4fr 1fr;gap:16px">
+          ${emptyModuleTable(
+            ['Trabajador','Sociedad','Asignados','Semanas usadas','Días sueltos','Disponibles'],
+            'Todavía no hay vacaciones registradas.'
+          )}
+          ${renderCalendar()}
+        </div>
+
+        <div class="notice">
+          Regla configurada: año natural, 32 días anuales,
+          proporcionalidad por fecha de alta y redondeo al entero
+          más cercano. Sin arrastre al año siguiente.
+        </div>
+      `;
+
+    case 'permisos':
+      return pageHeader(
+        'GESTIÓN LABORAL',
+        'Permisos y ausencias',
+        'Permisos retribuidos, ausencias justificadas no retribuidas,
+         injustificadas y bajas médicas.',
+        `
+          <button class="btn primary"
+            onclick="showNewRecord('Nuevo permiso o ausencia')">
+            + Nuevo registro
+          </button>
+        `
+      )+`
+        <div class="grid stats">
+          ${statCard('Horas médicas','Ver detalle','Consulta individual','clock','showIndividualSummary("Horas médicas")')}
+          ${statCard('Fuerza mayor','Ver detalle','Consulta individual','alert','showIndividualSummary("Fuerza mayor")')}
+          ${statCard('Ausencias','Ver detalle','Consulta individual','file','showIndividualSummary("Ausencias")')}
+        </div>
+
+        ${renderDateFilter('leaves')}
+
+        ${emptyModuleTable(
+          ['Trabajador','Tipo','Desde','Hasta','Duración','Categoría','Estado'],
+          'Todavía no hay permisos ni ausencias registrados.'
+        )}
+
+        <div class="notice">
+          Las horas médicas (36 horas anuales) y la fuerza mayor
+          (4 días anuales) se controlarán individualmente,
+          sin contadores globales.
+        </div>
+      `;
+
+    case 'incidencias':
+      return pageHeader(
+        'GESTIÓN LABORAL',
+        'Impuntualidades y abandonos',
+        'Control mensual con resúmenes semanales.',
+        `
+          <button class="btn primary"
+            onclick="showNewRecord('Registrar incidencia')">
+            + Registrar incidencia
+          </button>
+        `
+      )+`
+        ${renderDateFilter('incidents')}
+
+        <div class="grid stats">
+          ${renderIncidentSummary()}
+        </div>
+
+        ${emptyModuleTable(
+          ['Trabajador','Incidencia','Fecha','Hora','Duración','Observaciones','Estado'],
+          'Todavía no hay incidencias registradas.'
+        )}
+      `;
+
+    case 'partners':
+      return pageHeader(
+        'GESTIÓN ECONÓMICA',
+        'Partners',
+        'Registra las referencias de comerciales y sus incentivos.',
+        `<button class="btn primary" onclick="showNewRecord('Nuevo Partner')">
+          + Registrar Partner
+        </button>`
+      )+
+      renderDateFilter('partners')+
+      emptyModuleTable(
+        ['Comercial referente','Persona referida','Fecha incorporación','Incentivo','Estado'],
+        'Todavía no hay Partners registrados.'
+      );
+
+    case 'horas':
+      return pageHeader(
+        'GESTIÓN ECONÓMICA',
+        'Horas extra',
+        'Controla los sábados voluntarios y sus remuneraciones.',
+        `<button class="btn primary" onclick="showNewRecord('Registrar horas extra')">
+          + Registrar horas
+        </button>`
+      )+
+      renderDateFilter('hours')+
+      emptyModuleTable(
+        ['Trabajador','Fecha','Concepto','Horas','Importe','Estado'],
+        'Todavía no hay horas extra registradas.'
+      );
+
+    case 'pagos':
+      return pageHeader(
+        'GESTIÓN ECONÓMICA',
+        'Pagos adicionales',
+        'Registra pagos de facturas, incentivos y otros importes.',
+        `<button class="btn primary" onclick="showNewRecord('Nuevo pago adicional')">
+          + Registrar pago
+        </button>`
+      )+
+      renderDateFilter('payments')+
+      emptyModuleTable(
+        ['Trabajador','Concepto','Referencia','Importe','Fecha','Estado'],
+        'Todavía no hay pagos adicionales registrados.'
+      );
+
+    case 'pendientes':
+      return pageHeader(
+        'GESTIÓN ECONÓMICA',
+        'Pagos pendientes',
+        'Consulta y controla todos los importes pendientes de abono.'
+      )+
+      renderDateFilter('pending')+
+      emptyModuleTable(
+        ['Trabajador','Concepto','Importe','Fecha prevista','Antigüedad'],
+        'No hay pagos pendientes registrados.'
+      );
+
+    case 'bonos':
+      return pageHeader(
+        'GESTIÓN ECONÓMICA',
+        'Bonos de asistencia',
+        'Seguimiento del bono individual de asistencia.'
+      )+`
+        <div class="grid stats">
+          ${statCard('Importe del bono','200 €','Por trabajador','euro')}
+          ${statCard('Umbral de ausencias','3','Excluyendo permisos retribuidos','alert')}
+          ${statCard('Bonos perdidos','0','Sin trabajadores registrados','file')}
+        </div>
+
+        ${renderDateFilter('bonuses')}
+
+        ${emptyModuleTable(
+          ['Trabajador','Ausencias computables','Importe','Estado del bono'],
+          'Todavía no hay trabajadores ni bonos que evaluar.'
+        )}
+
+        <div class="notice">
+          Está pendiente definir si las impuntualidades y los abandonos
+          de puesto también cuentan para alcanzar el límite de tres ausencias.
+        </div>
+      `;
+
+    case 'configuracion':
+      return pageHeader(
+        'SISTEMA',
+        'Configuración',
+        'Gestiona los parámetros generales de Acerca.'
+      )+`
+        <div class="card panel" style="margin-bottom:16px">
+          <h3>Sociedades</h3>
+          <p>Gestiona las sociedades disponibles para las fichas de trabajadores.</p>
+          <button class="btn primary"
+            onclick="showNewRecord('Nueva sociedad')">
+            + Añadir sociedad
+          </button>
+        </div>
+
+        <div class="card panel">
+          <h3>Catálogo de permisos</h3>
+          <p>
+            Las condiciones podrán modificarse indicando una fecha de vigencia.
+          </p>
+
+          ${emptyModuleTable(
+            ['Permiso','Condiciones','Vigencia','Estado'],
+            'Todavía no se han configurado las condiciones.'
+          )}
+
+          <button class="btn primary" style="margin-top:15px"
+            onclick="showNewRecord('Nuevo tipo de permiso')">
+            + Añadir permiso
+          </button>
+        </div>
+      `;
+
+    default:
+      return '<h1>Página no encontrada</h1>';
+  }
+}
+
+/* =====================================================
+   NAVEGACIÓN
+   ===================================================== */
+
+function render() {
+  document.getElementById('crumb').textContent=titles[currentPage];
+
+  document.querySelectorAll('#mainNav button[data-page]')
+    .forEach(button=>{
+      button.classList.toggle(
+        'active',
+        button.dataset.page===currentPage
+      );
+    });
+
+  document.getElementById('view').innerHTML=pageContent();
+}
+
+function go(next) {
+  currentPage=next;
+  render();
+
+  document.getElementById('sidebar').classList.remove('open');
+
+  window.scrollTo(0,0);
+}
+
+document.querySelectorAll('#mainNav button[data-page]')
+  .forEach(button=>{
+    button.addEventListener('click',()=>{
+      go(button.dataset.page);
+    });
+  });
+
+document.getElementById('mobileMenu')
+  .addEventListener('click',()=>{
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+
+document.getElementById('modal')
+  .addEventListener('click',event=>{
+    if(event.target.id==='modal') closeModal();
+  });
+
+/* PRIMER RENDER */
+
+render();
+
+</script>
+
+<!-- CONEXIÓN CON SUPABASE -->
+<script src="./supabase-config.js"></script>
+<script type="module" src="./auth.js"></script>
+
+</body>
+</html>
