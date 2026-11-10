@@ -733,13 +733,14 @@ body.acerca-authenticated .auth-screen { display:none!important; }
 
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
 /* =====================================================
    DATOS INICIALES
    IMPORTANTE: NO HAY TRABAJADORES NI MOVIMIENTOS FICTICIOS.
    ===================================================== */
 
-const workers = [];
+let workers = [];
 const vacations = [];
 const leaves = [];
 const incidents = [];
@@ -1239,18 +1240,117 @@ function showNewWorker() {
 
 function showExcelImport() {
   openModal('Importación masiva de trabajadores',`
-    <p>La plantilla Excel tendrá estas columnas, respetando el orden:</p>
+    <p>Selecciona un Excel (.xlsx o .xls) con estas cinco columnas, en este orden:</p>
     <div class="detailrow"><b>AGENTE</b><span>Nombre</span></div>
     <div class="detailrow"><b>SOCIEDAD</b><span>Empresa</span></div>
     <div class="detailrow"><b>MAIL</b><span>Correo corporativo</span></div>
     <div class="detailrow"><b>FECHA ALTA</b><span>Fecha de incorporación</span></div>
-    <div class="detailrow"><b>FECHA DE BAJA</b><span>Fecha de finalización</span></div>
-
-    <div class="notice">
-      La lectura, validación y guardado del Excel se implementarán
-      cuando conectemos la tabla de trabajadores.
+    <div class="detailrow"><b>FECHA DE BAJA</b><span>Fecha de finalización (opcional)</span></div>
+    <div class="field" style="margin-top:18px">
+      <label for="workersExcel">Archivo Excel</label>
+      <input id="workersExcel" type="file" accept=".xlsx,.xls" onchange="previewWorkersExcel(event)">
+    </div>
+    <div id="workersImportStatus" class="notice">Podrás revisar los datos antes de guardarlos.</div>
+    <div id="workersImportPreview"></div>
+    <div class="actions" style="justify-content:flex-end;margin-top:16px">
+      <button id="confirmWorkersImport" class="btn primary" disabled onclick="saveWorkersExcel()">Importar trabajadores</button>
     </div>
   `);
+  window.pendingWorkersImport = null;
+}
+
+function excelDate(value) {
+  if (value === null || value === undefined || value === '') return null;
+  if (value instanceof Date && !isNaN(value)) return value.toISOString().slice(0,10);
+  if (typeof value === 'number' && window.XLSX) {
+    const d = XLSX.SSF.parse_date_code(value);
+    if (d) return new Date(Date.UTC(d.y,d.m-1,d.d)).toISOString().slice(0,10);
+  }
+  const s=String(value).trim();
+  if (!s) return null;
+  let m=s.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/);
+  if(m) return m[3]+'-'+m[2].padStart(2,'0')+'-'+m[1].padStart(2,'0');
+  const d=new Date(s);
+  return isNaN(d) ? 'INVALID' : d.toISOString().slice(0,10);
+}
+
+async function previewWorkersExcel(event) {
+  const file=event.target.files?.[0];
+  const status=document.getElementById('workersImportStatus');
+  const preview=document.getElementById('workersImportPreview');
+  const button=document.getElementById('confirmWorkersImport');
+  button.disabled=true; preview.innerHTML=''; window.pendingWorkersImport=null;
+  if(!file) return;
+  try {
+    if(!window.XLSX) throw new Error('No se ha podido cargar el lector de Excel. Recarga la página e inténtalo de nuevo.');
+    const data=await file.arrayBuffer();
+    const workbook=XLSX.read(data,{type:'array',cellDates:true});
+    const sheet=workbook.Sheets[workbook.SheetNames[0]];
+    const rows=XLSX.utils.sheet_to_json(sheet,{header:1,defval:''});
+    if(rows.length<2) throw new Error('El Excel no contiene filas de trabajadores.');
+    const headers=rows[0].map(v=>String(v).trim().toUpperCase());
+    const expected=['AGENTE','SOCIEDAD','MAIL','FECHA ALTA','FECHA DE BAJA'];
+    if(expected.some((h,i)=>headers[i]!==h)) throw new Error('Las columnas deben llamarse y aparecer en este orden: '+expected.join(', ')+'.');
+    const parsed=rows.slice(1).filter(r=>r.some(v=>String(v).trim()!=='')).map((r,i)=>{
+      const name=String(r[0]||'').trim(), company=String(r[1]||'').trim(), email=String(r[2]||'').trim().toLowerCase();
+      const hire=excelDate(r[3]), termination=excelDate(r[4]);
+      const errors=[];
+      if(!name) errors.push('falta agente');
+      if(!company) errors.push('falta sociedad');
+      if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push('mail no válido');
+      if(!hire || hire==='INVALID') errors.push('fecha alta no válida');
+      if(termination==='INVALID') errors.push('fecha baja no válida');
+      if(hire && termination && termination!=='INVALID' && termination<hire) errors.push('fecha baja anterior al alta');
+      return {agent:name,company,email,hire_date:hire,termination_date:termination,errors,row:i+2};
+    });
+    const invalid=parsed.filter(r=>r.errors.length);
+    if(!parsed.length) throw new Error('No se han encontrado trabajadores en el Excel.');
+    window.pendingWorkersImport=parsed.filter(r=>!r.errors).map(({errors,row,...w})=>w);
+    status.textContent=parsed.length+' filas leídas. '+(invalid.length?invalid.length+' con errores.':'Todas las filas son válidas.')+' Revisa la vista previa.';
+    preview.innerHTML=`<div class="card tablewrap" style="margin-top:12px;max-height:240px;overflow:auto"><table class="table"><thead><tr><th>Agente</th><th>Sociedad</th><th>Mail</th><th>Fecha alta</th><th>Fecha baja</th><th>Validación</th></tr></thead><tbody>${parsed.slice(0,100).map(w=>`<tr><td>${escapeHtml(w.agent)}</td><td>${escapeHtml(w.company)}</td><td>${escapeHtml(w.email)}</td><td>${w.hire_date||'—'}</td><td>${w.termination_date||'—'}</td><td>${w.errors.length?'<span class="pill red">'+w.errors.join(', ')+'</span>':'<span class="pill green">Correcto</span>'}</td></tr>`).join('')}</tbody></table></div><small>Se muestran hasta 100 filas.</small>`;
+    button.disabled=invalid.length>0 || !window.pendingWorkersImport.length;
+    if(invalid.length) status.textContent+=' Corrige los errores en el Excel para continuar.';
+  } catch(err) {
+    status.textContent=err.message; status.className='notice error';
+  }
+}
+
+function escapeHtml(value) {
+  return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+async function saveWorkersExcel() {
+  const status=document.getElementById('workersImportStatus');
+  const button=document.getElementById('confirmWorkersImport');
+  const client=window.ACERCA_SUPABASE;
+  const rows=window.pendingWorkersImport||[];
+  if(!client || !rows.length) {status.textContent='No hay datos válidos o no se ha establecido la conexión con Supabase.';return;}
+  button.disabled=true; button.textContent='Guardando...';
+  try {
+    const {data:existing,error:readError}=await client.from('workers').select('email');
+    if(readError) throw readError;
+    const emails=new Set((existing||[]).map(w=>(w.email||'').toLowerCase()));
+    const unique=rows.filter(w=>!emails.has(w.email));
+    const skipped=rows.length-unique.length;
+    if(!unique.length) throw new Error('Todos los correos del archivo ya están registrados. No se ha añadido ningún duplicado.');
+    for(let i=0;i<unique.length;i+=100) {
+      const {error}=await client.from('workers').insert(unique.slice(i,i+100));
+      if(error) throw error;
+    }
+    await window.refreshWorkers?.();
+    status.textContent='Importación completada: '+unique.length+' trabajadores guardados'+(skipped?', '+skipped+' duplicados omitidos':'')+'.';
+    button.textContent='Importación completada';
+    setTimeout(()=>{closeModal();render();},1200);
+  } catch(err) {
+    console.error(err);
+    status.textContent=err.message||'No se ha podido guardar la importación. Comprueba la configuración de la tabla workers en Supabase.';
+    button.disabled=false; button.textContent='Reintentar importación';
+  }
+}
+
+function renderWorkersTable() {
+  if(!workers.length) return emptyModuleTable(['Agente','Sociedad','Mail','Fecha alta','Fecha baja'],'Todavía no hay trabajadores registrados.');
+  return `<div class="card tablewrap"><table class="table"><thead><tr>${['Agente','Sociedad','Mail','Fecha alta','Fecha baja'].map(h=>'<th>'+h+'</th>').join('')}</tr></thead><tbody>${workers.map(w=>`<tr><td>${escapeHtml(w.agent)}</td><td>${escapeHtml(w.company)}</td><td>${escapeHtml(w.email)}</td><td>${w.hire_date||'—'}</td><td>${w.termination_date||'—'}</td></tr>`).join('')}</tbody></table></div>`;
 }
 
 function showNewRecord(type) {
@@ -1360,10 +1460,7 @@ function pageContent() {
         `
       )+
       renderDateFilter('workers')+
-      emptyModuleTable(
-        ['Agente','Sociedad','Mail','Fecha alta','Fecha baja'],
-        'Todavía no hay trabajadores registrados.'
-      );
+      renderWorkersTable();
 
     case 'vacaciones':
       return pageHeader(
