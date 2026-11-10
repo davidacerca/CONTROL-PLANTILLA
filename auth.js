@@ -56,6 +56,13 @@ if (!form || !loginButton || !logoutButton) {
     config.supabaseUrl,
     config.supabasePublishableKey
   );
+  window.ACERCA_SUPABASE = supabase;
+  window.refreshWorkers = async function() {
+    const { data, error } = await supabase.from('workers').select('*').order('agent');
+    if (error) { console.error('No se pudieron cargar los trabajadores:', error); return; }
+    window.workers = data || [];
+    if (typeof renderWorkersTable === 'function') { workers = data || []; if (currentPage === 'trabajadores') render(); }
+  };
 
   async function authorizeSession(session) {
     if (!session?.user) {
@@ -77,6 +84,7 @@ if (!form || !loginButton || !logoutButton) {
     }
 
     showApp(session.user);
+    if (window.refreshWorkers) await window.refreshWorkers();
   }
 
   form.addEventListener("submit", async (event) => {
