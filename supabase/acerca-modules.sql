@@ -112,8 +112,8 @@ declare t text;
 begin
   foreach t in array array['vacation_records','leave_records','incident_records','partner_records','extra_hours','additional_payments','pending_payments']
   loop
-    execute format('drop policy if exists "Admins manage %I" on public.%I',t,t);
-    execute format('create policy "Admins manage %I" on public.%I for all to authenticated using (public.is_acerca_admin()) with check (public.is_acerca_admin())',t,t);
+    execute format('drop policy if exists %I on public.%I', 'Admins manage ' || t, t);
+    execute format('create policy %I on public.%I for all to authenticated using (public.is_acerca_admin()) with check (public.is_acerca_admin())', 'Admins manage ' || t, t);
     execute format('grant select, insert, update, delete on public.%I to authenticated',t);
   end loop;
 end $$;
