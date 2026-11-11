@@ -744,8 +744,8 @@ let workers = [];
 const COMPANIES = ['About Room','Eurodelta SL','Elevate ventrures'];
 
 function normalizeCompany(value) {
-  const key = String(value || '').trim().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLowerCase().replace(/\\s+/g,' ');
-  return COMPANIES.find(company => company.normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLowerCase() === key) || null;
+  const key = String(value || '').trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ');
+  return COMPANIES.find(company => company.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase() === key) || null;
 }
 const vacations = [];
 const leaves = [];
@@ -1307,7 +1307,7 @@ async function previewWorkersExcel(event) {
       const hire=excelDate(r[3]), termination=excelDate(r[4]), errors=[];
       if(!name) errors.push('falta agente');
       if(!company) errors.push('sociedad no reconocida: '+(rawCompany||'vacía')+' (usa About Room, Eurodelta SL o Elevate ventrures)');
-      if(!email || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) errors.push('mail no válido');
+      if(!email || !/^[^\s@]+@[^\s@]+\\.[^\s@]+$/.test(email)) errors.push('mail no válido');
       if(!hire || hire==='INVALID') errors.push('fecha alta no válida');
       if(termination==='INVALID') errors.push('fecha baja no válida');
       if(hire && termination && termination!=='INVALID' && termination<hire) errors.push('fecha baja anterior al alta');
