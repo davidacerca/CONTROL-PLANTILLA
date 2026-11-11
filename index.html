@@ -741,6 +741,12 @@ body.acerca-authenticated .auth-screen { display:none!important; }
    ===================================================== */
 
 let workers = [];
+const COMPANIES = ['About Room','Eurodelta SL','Elevate ventrures'];
+
+function normalizeCompany(value) {
+  const key = String(value || '').trim().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLowerCase().replace(/\\s+/g,' ');
+  return COMPANIES.find(company => company.normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLowerCase() === key) || null;
+}
 const vacations = [];
 const leaves = [];
 const incidents = [];
@@ -1197,45 +1203,47 @@ function renderIncidentSummary() {
 
 function showNewWorker() {
   openModal('Nuevo trabajador',`
-    <p class="sub">Datos de la nueva ficha.</p>
-
-    <div class="field">
-      <label>Nombre y apellidos</label>
-      <input placeholder="Nombre del trabajador">
-    </div>
-
-    <div class="field">
-      <label>Sociedad</label>
-      <select>
-        <option value="">Seleccionar sociedad</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>Mail corporativo</label>
-      <input type="email" placeholder="trabajador@empresa.com">
-    </div>
-
-    <div class="field">
-      <label>Fecha de alta</label>
-      <input type="date">
-    </div>
-
-    <div class="field">
-      <label>Fecha de baja</label>
-      <input type="date">
-    </div>
-
-    <div class="field">
-      <label>Motivo de finalización</label>
-      <textarea rows="3"></textarea>
-    </div>
-
-    <div class="notice">
-      El formulario se conectará a Supabase en la siguiente fase.
-      Todavía no guarda datos.
-    </div>
+    <form id="newWorkerForm" onsubmit="saveNewWorker(event)">
+      <p class="sub">Datos de la nueva ficha.</p>
+      <div class="field"><label for="newWorkerName">Nombre y apellidos</label><input id="newWorkerName" required placeholder="Nombre del trabajador"></div>
+      <div class="field"><label for="newWorkerCompany">Sociedad</label><select id="newWorkerCompany" required><option value="">Seleccionar sociedad</option>${COMPANIES.map(company=>`<option value="${escapeHtml(company)}">${escapeHtml(company)}</option>`).join('')}</select></div>
+      <div class="field"><label for="newWorkerEmail">Mail corporativo</label><input id="newWorkerEmail" type="email" required placeholder="trabajador@empresa.com"></div>
+      <div class="field"><label for="newWorkerHire">Fecha de alta</label><input id="newWorkerHire" type="date" required></div>
+      <div class="field"><label for="newWorkerTermination">Fecha de baja</label><input id="newWorkerTermination" type="date"></div>
+      <div class="field"><label for="newWorkerReason">Motivo de finalización</label><textarea id="newWorkerReason" rows="3"></textarea></div>
+      <div id="newWorkerStatus" class="notice">La sociedad seleccionada se guardará en la ficha del trabajador.</div>
+      <div class="actions" style="justify-content:flex-end"><button class="btn primary" id="saveNewWorkerButton" type="submit">Guardar trabajador</button></div>
+    </form>
   `);
+}
+
+async function saveNewWorker(event) {
+  event.preventDefault();
+  const status=document.getElementById('newWorkerStatus');
+  const button=document.getElementById('saveNewWorkerButton');
+  const client=window.ACERCA_SUPABASE;
+  if(!client) { status.textContent='No hay conexión con Supabase. Inicia sesión de nuevo e inténtalo.'; return; }
+  const worker={
+    agent:document.getElementById('newWorkerName').value.trim(),
+    company:document.getElementById('newWorkerCompany').value,
+    email:document.getElementById('newWorkerEmail').value.trim().toLowerCase(),
+    hire_date:document.getElementById('newWorkerHire').value,
+    termination_date:document.getElementById('newWorkerTermination').value || null
+  };
+  if(worker.termination_date && worker.termination_date < worker.hire_date) { status.textContent='La fecha de baja no puede ser anterior a la fecha de alta.'; return; }
+  button.disabled=true; button.textContent='Guardando...';
+  try {
+    const {error}=await client.from('workers').insert(worker);
+    if(error) throw error;
+    await window.refreshWorkers?.();
+    showToast('Trabajador guardado correctamente.');
+    closeModal();
+    if(currentPage==='trabajadores') render();
+  } catch(error) {
+    console.error(error);
+    status.textContent=error.message || 'No se ha podido guardar el trabajador.';
+    button.disabled=false; button.textContent='Reintentar';
+  }
 }
 
 function showExcelImport() {
@@ -1279,7 +1287,8 @@ async function previewWorkersExcel(event) {
   const status=document.getElementById('workersImportStatus');
   const preview=document.getElementById('workersImportPreview');
   const button=document.getElementById('confirmWorkersImport');
-  button.disabled=true; preview.innerHTML=''; window.pendingWorkersImport=null;
+  button.disabled=true; button.textContent='Importar trabajadores';
+  preview.innerHTML=''; window.pendingWorkersImport=null;
   if(!file) return;
   try {
     if(!window.XLSX) throw new Error('No se ha podido cargar el lector de Excel. Recarga la página e inténtalo de nuevo.');
@@ -1292,26 +1301,31 @@ async function previewWorkersExcel(event) {
     const expected=['AGENTE','SOCIEDAD','MAIL','FECHA ALTA','FECHA DE BAJA'];
     if(expected.some((h,i)=>headers[i]!==h)) throw new Error('Las columnas deben llamarse y aparecer en este orden: '+expected.join(', ')+'.');
     const parsed=rows.slice(1).filter(r=>r.some(v=>String(v).trim()!=='')).map((r,i)=>{
-      const name=String(r[0]||'').trim(), company=String(r[1]||'').trim(), email=String(r[2]||'').trim().toLowerCase();
-      const hire=excelDate(r[3]), termination=excelDate(r[4]);
-      const errors=[];
+      const name=String(r[0]||'').trim(), rawCompany=String(r[1]||'').trim();
+      const company=normalizeCompany(rawCompany);
+      const email=String(r[2]||'').trim().toLowerCase();
+      const hire=excelDate(r[3]), termination=excelDate(r[4]), errors=[];
       if(!name) errors.push('falta agente');
-      if(!company) errors.push('falta sociedad');
-      if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push('mail no válido');
+      if(!company) errors.push('sociedad no reconocida: '+(rawCompany||'vacía')+' (usa About Room, Eurodelta SL o Elevate ventrures)');
+      if(!email || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) errors.push('mail no válido');
       if(!hire || hire==='INVALID') errors.push('fecha alta no válida');
       if(termination==='INVALID') errors.push('fecha baja no válida');
       if(hire && termination && termination!=='INVALID' && termination<hire) errors.push('fecha baja anterior al alta');
-      return {agent:name,company,email,hire_date:hire,termination_date:termination,errors,row:i+2};
+      return {agent:name,company:company||rawCompany,email,hire_date:hire,termination_date:termination,errors,row:i+2};
     });
     const invalid=parsed.filter(r=>r.errors.length);
     if(!parsed.length) throw new Error('No se han encontrado trabajadores en el Excel.');
     window.pendingWorkersImport=parsed.filter(r=>!r.errors).map(({errors,row,...w})=>w);
+    status.className='notice';
     status.textContent=parsed.length+' filas leídas. '+(invalid.length?invalid.length+' con errores.':'Todas las filas son válidas.')+' Revisa la vista previa.';
-    preview.innerHTML=`<div class="card tablewrap" style="margin-top:12px;max-height:240px;overflow:auto"><table class="table"><thead><tr><th>Agente</th><th>Sociedad</th><th>Mail</th><th>Fecha alta</th><th>Fecha baja</th><th>Validación</th></tr></thead><tbody>${parsed.slice(0,100).map(w=>`<tr><td>${escapeHtml(w.agent)}</td><td>${escapeHtml(w.company)}</td><td>${escapeHtml(w.email)}</td><td>${w.hire_date||'—'}</td><td>${w.termination_date||'—'}</td><td>${w.errors.length?'<span class="pill red">'+w.errors.join(', ')+'</span>':'<span class="pill green">Correcto</span>'}</td></tr>`).join('')}</tbody></table></div><small>Se muestran hasta 100 filas.</small>`;
-    button.disabled=invalid.length>0 || !window.pendingWorkersImport.length;
-    if(invalid.length) status.textContent+=' Corrige los errores en el Excel para continuar.';
+    preview.innerHTML=`<div class="card tablewrap" style="margin-top:12px;max-height:240px;overflow:auto"><table class="table"><thead><tr><th>Agente</th><th>Sociedad</th><th>Mail</th><th>Fecha alta</th><th>Fecha baja</th><th>Validación</th></tr></thead><tbody>${parsed.slice(0,100).map(w=>`<tr><td>${escapeHtml(w.agent)}</td><td>${escapeHtml(w.company)}</td><td>${escapeHtml(w.email)}</td><td>${w.hire_date||'—'}</td><td>${w.termination_date||'—'}</td><td>${w.errors.length?'<span class="pill red">'+w.errors.map(escapeHtml).join(', ')+'</span>':'<span class="pill green">Correcto</span>'}</td></tr>`).join('')}</tbody></table></div><small>Se muestran hasta 100 filas.</small>`;
+    const canImport=invalid.length===0 && window.pendingWorkersImport.length>0;
+    button.disabled=!canImport;
+    if(canImport) status.textContent+=' Ya puedes pulsar «Importar trabajadores».';
+    else status.textContent+=' Corrige los errores indicados en el Excel para continuar.';
   } catch(err) {
-    status.textContent=err.message; status.className='notice error';
+    status.className='notice error'; status.textContent=err.message || 'No se ha podido leer el Excel.';
+    button.disabled=true;
   }
 }
 
