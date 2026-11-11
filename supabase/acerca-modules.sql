@@ -41,6 +41,8 @@ create table if not exists public.incident_records (
   incident_type text not null check (incident_type in ('Impuntualidad','Abandono de puesto')),
   incident_date date not null,
   incident_time time,
+  planned_time time,
+  end_time time,
   duration_minutes integer not null default 0 check (duration_minutes >= 0),
   is_justified boolean not null default false,
   counts_for_bonus boolean not null default false,
@@ -119,3 +121,14 @@ begin
 end $$;
 
 grant select, insert, update, delete on public.workers to authenticated;
+
+
+-- Compatibilidad con instalaciones anteriores: añade los campos de cálculo horario
+-- sin borrar incidencias existentes.
+alter table public.incident_records add column if not exists planned_time time;
+alter table public.incident_records add column if not exists end_time time;
+
+-- Permite a PostgREST descubrir las tablas y columnas recién creadas.
+grant usage on schema public to authenticated;
+grant execute on function public.is_acerca_admin() to authenticated;
+notify pgrst, 'reload schema';
