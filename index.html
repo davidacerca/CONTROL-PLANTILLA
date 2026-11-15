@@ -240,6 +240,7 @@ body.acerca-authenticated .auth-screen { display:none!important; }
 .import-company-list p { margin:3px 0 8px;font-size:12px;color:var(--muted); }
 .import-company { display:grid;grid-template-columns:minmax(150px,.7fr) minmax(220px,1.3fr);align-items:center;gap:12px;padding:7px 0;border-top:1px solid var(--line); }
 .import-company label { font-size:12px;font-weight:650;color:var(--ink); }
+.import-company label small { display:block;margin-top:4px;color:var(--muted);font-weight:400; }
 .import-company select { width:100%;min-height:38px;border:1px solid var(--line);border-radius:8px;padding:0 10px;background:white;color:var(--ink); }
 .profile-summary { display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px;background:#f7f8fc;border:1px solid var(--line);border-radius:12px;margin-bottom:14px; }
 .profile-summary h3 { margin:0 0 4px;font-size:16px; }
@@ -761,11 +762,11 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="./app.js?v=20261115-4"></script>
+<script src="./app.js?v=20261115-5"></script>
 
 <!-- CONEXIÓN CON SUPABASE -->
 <script src="./supabase-config.js"></script>
-<script type="module" src="./auth.js?v=20261115-4"></script>
+<script type="module" src="./auth.js?v=20261115-5"></script>
 
 <style>
 @media print {
