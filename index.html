@@ -207,6 +207,8 @@ body.acerca-authenticated .auth-screen { display:none!important; }
   height:18px;
   flex-shrink:0;
 }
+.navicon { color:currentColor;opacity:.84; }
+.nav button.active .navicon { opacity:1; }
 
 .sidebottom {
   margin-top:auto;
@@ -333,6 +335,8 @@ body.acerca-authenticated .auth-screen { display:none!important; }
 }
 
 .staticon svg { width:19px;height:19px; }
+.icon { width:16px;height:16px;vertical-align:-3px;margin-right:6px; }
+button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible { outline:3px solid #8a81f2;outline-offset:2px; }
 
 .value { font-size:27px;font-weight:800;letter-spacing:-1px;margin:10px 0 2px; }
 .foot { font-size:11px;color:var(--muted); }
@@ -393,6 +397,8 @@ body.acerca-authenticated .auth-screen { display:none!important; }
   color:var(--accent);
   font-size:19px;
 }
+.empty-icon svg { width:19px;height:19px; }
+.btn svg { width:16px;height:16px;vertical-align:-3px;margin-right:6px; }
 
 .pill {
   display:inline-block;
@@ -648,46 +654,46 @@ body.acerca-authenticated .auth-screen { display:none!important; }
 
     <nav class="nav" id="mainNav">
       <button class="active" data-page="inicio">
-        <span>▦</span>Inicio
+        <svg class="navicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="10" width="8" height="11" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/></svg>Inicio
       </button>
       <button data-page="trabajadores">
-        <span>♙</span>Trabajadores
+        <svg class="navicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M20 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Trabajadores
       </button>
 
       <div class="navlabel">Gestión laboral</div>
 
       <button data-page="vacaciones">
-        <span>▣</span>Vacaciones
+        <svg class="navicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/></svg>Vacaciones
       </button>
       <button data-page="permisos">
-        <span>▤</span>Permisos y ausencias
+        <svg class="navicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg>Permisos y ausencias
       </button>
       <button data-page="incidencias">
-        <span>◷</span>Impuntualidades y abandonos
+        <svg class="navicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Impuntualidades y abandonos
       </button>
 
       <div class="navlabel">Gestión económica</div>
 
       <button data-page="partners">
-        <span>♧</span>Partners
+        <svg class="navicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m11 17 2 2a2 2 0 0 0 3-3"/><path d="m14 14 4 4a2 2 0 0 0 3-3l-7-7-4 1-3-2-5 5a2 2 0 0 0 3 3l3-3"/></svg>Partners
       </button>
       <button data-page="horas">
-        <span>◴</span>Horas extra
+        <svg class="navicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Horas extra
       </button>
       <button data-page="pagos">
-        <span>▤</span>Pagos adicionales
+        <svg class="navicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18M8 6v4l2 1"/></svg>Pagos adicionales
       </button>
       <button data-page="pendientes">
-        <span>▣</span>Pagos pendientes
+        <svg class="navicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg>Pagos pendientes
       </button>
       <button data-page="bonos">
-        <span>✧</span>Bonos de asistencia
+        <svg class="navicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 14 9l6 3-6 2-2 7-2-7-6-2 6-3 2-6Z"/></svg>Bonos de asistencia
       </button>
 
       <div class="navlabel">Sistema</div>
 
       <button data-page="configuracion">
-        <span>⚙</span>Configuración
+        <svg class="navicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.7a8 8 0 0 1-1.7 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.7-1l-1.7.7-1.4-2.4L7.3 15a8 8 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.7a8 8 0 0 1 1.7-1l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.7 1l1.7-.7 1.4 2.4L19.4 13a8 8 0 0 1 0 2Z"/></svg>Configuración
       </button>
     </nav>
 
@@ -700,7 +706,7 @@ body.acerca-authenticated .auth-screen { display:none!important; }
   <main class="main">
     <header class="topbar">
       <div style="display:flex;align-items:center;gap:10px">
-        <button class="btn mobilemenu" id="mobileMenu">☰</button>
+        <button class="btn mobilemenu" id="mobileMenu" aria-label="Abrir menú"><svg class="navicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
         <div class="crumb">Acerca / <b id="crumb">Inicio</b></div>
       </div>
 
@@ -734,11 +740,11 @@ body.acerca-authenticated .auth-screen { display:none!important; }
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="./app.js?v=20261111-3"></script>
+<script src="./app.js?v=20261115-1"></script>
 
 <!-- CONEXIÓN CON SUPABASE -->
 <script src="./supabase-config.js"></script>
-<script type="module" src="./auth.js?v=20261111-3"></script>
+<script type="module" src="./auth.js?v=20261115-1"></script>
 
 </body>
 </html>

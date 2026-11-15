@@ -7,6 +7,48 @@ alter table public.workers alter column email set default '-';
 alter table public.workers add column if not exists termination_reason text;
 update public.workers set email='-' where email is null or btrim(email)='';
 
+-- Catálogo editable. El nombre se usa como relación para conservar compatible
+-- el campo company existente; los cambios de nombre se propagan, el borrado no.
+create table if not exists public.societies (
+  name text primary key check (btrim(name) <> ''),
+  active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create unique index if not exists societies_name_lower_uidx on public.societies (lower(name));
+
+insert into public.societies(name)
+select distinct btrim(company) from public.workers
+where company is not null and btrim(company) <> ''
+on conflict do nothing;
+insert into public.societies(name) values
+  ('About Room'), ('Eurodelta SL'), ('Elevate ventrures')
+on conflict do nothing;
+
+-- Normaliza solo espacios y mayúsculas del catálogo para enlazar las fichas.
+update public.workers w set company=s.name
+from public.societies s
+where lower(btrim(w.company))=lower(btrim(s.name)) and w.company is distinct from s.name;
+
+do $$
+begin
+  if not exists (select 1 from pg_constraint where conrelid='public.workers'::regclass and conname='workers_company_fkey') then
+    alter table public.workers add constraint workers_company_fkey
+      foreign key (company) references public.societies(name)
+      on update cascade on delete restrict not valid;
+  end if;
+end $$;
+alter table public.workers validate constraint workers_company_fkey;
+create unique index if not exists workers_email_lower_uidx
+  on public.workers (lower(btrim(email)))
+  where email is not null and btrim(email) not in ('', '-');
+alter table public.societies enable row level security;
+drop policy if exists "Admins manage societies" on public.societies;
+create policy "Admins manage societies" on public.societies
+  for all to authenticated using (public.is_acerca_admin()) with check (public.is_acerca_admin());
+grant select, insert, update, delete on public.societies to authenticated;
+revoke delete on public.societies from anon, authenticated;
+
 create table if not exists public.vacation_records (
   id uuid primary key default gen_random_uuid(),
   worker_id uuid not null references public.workers(id) on delete cascade,
@@ -101,6 +143,21 @@ create index if not exists extra_hours_worker_date_idx on public.extra_hours(wor
 create index if not exists additional_payments_worker_date_idx on public.additional_payments(worker_id,payment_date);
 create index if not exists pending_payments_worker_date_idx on public.pending_payments(worker_id,expected_date);
 
+-- Evita la desaparición en cascada del historial si se intenta borrar un trabajador.
+-- Los registros se conservan y las bajas se representan con termination_date.
+do $$
+declare r record;
+begin
+  for r in
+    select conrelid::regclass as table_name, conname
+    from pg_constraint
+    where contype='f' and confrelid='public.workers'::regclass and confdeltype='c'
+  loop
+    execute format('alter table %s drop constraint %I',r.table_name,r.conname);
+    execute format('alter table %s add constraint %I foreign key (worker_id) references public.workers(id) on delete restrict',r.table_name,r.conname);
+  end loop;
+end $$;
+
 alter table public.vacation_records enable row level security;
 alter table public.leave_records enable row level security;
 alter table public.incident_records enable row level security;
@@ -120,7 +177,19 @@ begin
   end loop;
 end $$;
 
-grant select, insert, update, delete on public.workers to authenticated;
+drop policy if exists "Admins can manage workers" on public.workers;
+drop policy if exists "Admins manage workers" on public.workers;
+drop policy if exists "Admins read workers" on public.workers;
+drop policy if exists "Admins add workers" on public.workers;
+drop policy if exists "Admins update workers" on public.workers;
+create policy "Admins read workers" on public.workers
+  for select to authenticated using (public.is_acerca_admin());
+create policy "Admins add workers" on public.workers
+  for insert to authenticated with check (public.is_acerca_admin());
+create policy "Admins update workers" on public.workers
+  for update to authenticated using (public.is_acerca_admin()) with check (public.is_acerca_admin());
+revoke delete on public.workers from anon, authenticated;
+grant select, insert, update on public.workers to authenticated;
 
 
 -- Compatibilidad con instalaciones anteriores: añade los campos de cálculo horario
