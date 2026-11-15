@@ -11,11 +11,13 @@ Aplicación administrativa privada publicada con GitHub Pages y conectada a Supa
 
 ## Base de datos
 
-En una instalación nueva, crea primero `public.workers` con `supabase/workers.sql`, ejecuta después `supabase/acerca-modules.sql` y finalmente `supabase/acerca-payroll-analysis.sql` desde Supabase SQL Editor. Los scripts son idempotentes y conservan los registros existentes. La aplicación requiere las políticas RLS activas.
+En una instalación nueva, crea primero `public.workers` con `supabase/workers.sql`, ejecuta después `supabase/acerca-modules.sql`, `supabase/acerca-payroll-analysis.sql` y `supabase/acerca-workflow-updates.sql` desde Supabase SQL Editor. Los scripts son idempotentes y conservan los registros existentes. La aplicación requiere las políticas RLS activas.
 
 El esquema incluye sociedades editables, trabajadores, vacaciones, permisos y ausencias, incidencias, partners, horas extra y pagos. Las fichas de trabajadores no se borran desde el cliente; se marca la fecha de baja para conservar el historial. Los periodos de vacaciones sí se pueden eliminar desde su detalle, con confirmación.
 
-Los pagos previstos por primera nómina mensual completa se generan una sola vez. La persona debe estar activa hasta el último día del mes. El pago de formación se muestra sin cuantía; cada incentivo Partner es de 100 €. Los pagos aparecen en Pagos adicionales por su mes de nómina y se pueden marcar abonados al cierre del mes.
+Los pagos previstos por primera nómina mensual completa se generan una sola vez. La persona debe estar activa hasta el último día del mes. El pago de formación se muestra sin cuantía; cada incentivo Partner es de 100 €. Se fechan al último día de su mes de nómina y pasan por Próximo, Pendiente y Pasado según el mes actual. Los pagos no realizados se pueden trasladar a Pagos pendientes.
+
+Horas extra se pueden registrar desde un Excel con las columnas AGENTE, SOCIEDAD, Fecha y Horas; al seleccionar el archivo, las filas válidas se importan y se deduplican automáticamente. Los importes son opcionales. Bonos de asistencia se reconocen por defecto y se pueden recuperar en caso de excepción.
 
 El apartado Análisis permite filtrar registros por fechas, área y sociedad, seleccionar campos y usar la opción de impresión del navegador para guardar el informe en PDF.
 

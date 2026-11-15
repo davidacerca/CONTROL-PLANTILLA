@@ -126,7 +126,7 @@ create table if not exists public.extra_hours (
   work_date date not null,
   concept text not null,
   hours numeric(8,2) not null check (hours > 0),
-  amount numeric(12,2) not null default 0,
+  amount numeric(12,2) default 0,
   status text not null default 'Pendiente',
   notes text,
   created_at timestamptz not null default now()
@@ -146,7 +146,7 @@ create table if not exists public.pending_payments (
   id uuid primary key default gen_random_uuid(),
   worker_id uuid not null references public.workers(id) on delete cascade,
   concept text not null,
-  amount numeric(12,2) not null check (amount >= 0),
+  amount numeric(12,2) check (amount is null or amount >= 0),
   expected_date date not null,
   status text not null default 'Pendiente' check (status in ('Pendiente','Abonado','Cancelado')),
   paid_at date,
