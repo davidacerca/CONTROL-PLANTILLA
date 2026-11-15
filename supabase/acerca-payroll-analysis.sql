@@ -49,6 +49,9 @@ create unique index if not exists additional_obligations_training_worker_uidx
 create unique index if not exists additional_obligations_partner_record_uidx
   on public.additional_payment_obligations(partner_record_id)
   where obligation_type='Incentivo Partner' and partner_record_id is not null;
+create unique index if not exists additional_obligations_partner_worker_uidx
+  on public.additional_payment_obligations(worker_id)
+  where obligation_type='Incentivo Partner';
 create index if not exists additional_obligations_month_idx
   on public.additional_payment_obligations(payroll_month, status);
 
