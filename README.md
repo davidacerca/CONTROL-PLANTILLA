@@ -11,9 +11,13 @@ Aplicación administrativa privada publicada con GitHub Pages y conectada a Supa
 
 ## Base de datos
 
-En una instalación nueva, crea primero `public.workers` con `supabase/workers.sql` y ejecuta después `supabase/acerca-modules.sql` desde Supabase SQL Editor. El segundo script es idempotente y conserva los registros existentes. Activa RLS y aplica políticas antes de usar la aplicación.
+En una instalación nueva, crea primero `public.workers` con `supabase/workers.sql`, ejecuta después `supabase/acerca-modules.sql` y finalmente `supabase/acerca-payroll-analysis.sql` desde Supabase SQL Editor. Los scripts son idempotentes y conservan los registros existentes. La aplicación requiere las políticas RLS activas.
 
-El esquema incluye sociedades editables, trabajadores, vacaciones, permisos y ausencias, incidencias, partners, horas extra y pagos. Las fichas de trabajadores no se borran desde el cliente; se marca la fecha de baja para conservar el historial.
+El esquema incluye sociedades editables, trabajadores, vacaciones, permisos y ausencias, incidencias, partners, horas extra y pagos. Las fichas de trabajadores no se borran desde el cliente; se marca la fecha de baja para conservar el historial. Los periodos de vacaciones sí se pueden eliminar desde su detalle, con confirmación.
+
+Los pagos previstos por primera nómina mensual completa se generan una sola vez. La persona debe estar activa hasta el último día del mes. El pago de formación se muestra sin cuantía; cada incentivo Partner es de 100 €. Los pagos aparecen en Pagos adicionales por su mes de nómina y se pueden marcar abonados al cierre del mes.
+
+El apartado Análisis permite filtrar registros por fechas, área y sociedad, seleccionar campos y usar la opción de impresión del navegador para guardar el informe en PDF.
 
 ## Publicación
 
@@ -23,4 +27,4 @@ El workflow `.github/workflows/deploy.yml` publica la rama `main` en GitHub Page
 
 ## Alcance actual
 
-La autenticación, las políticas de las tablas existentes y la publicación están configuradas. Trabajadores y vacaciones están en desarrollo funcional. Revisa cada módulo contra los requisitos antes de utilizarlo con datos laborales reales; las reglas del bono y otras condiciones pendientes aún necesitan definición.
+La autenticación, las políticas de datos, la gestión de trabajadores, vacaciones y pagos previstos están configuradas. Los informes usan los datos del sistema. Revisa los módulos de permisos, incidencias y gestión económica contra los requisitos internos antes de utilizarlos como fuente de decisiones laborales o contables.

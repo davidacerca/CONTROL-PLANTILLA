@@ -8,13 +8,13 @@
 
 <style>
 :root {
-  --bg:#f4f6fb;
+  --bg:#f3f5f9;
   --white:#fff;
-  --nav:#172338;
-  --ink:#172033;
-  --muted:#7b879a;
-  --line:#e7ebf2;
-  --accent:#5c50d4;
+  --nav:#17243a;
+  --ink:#1b2638;
+  --muted:#68758a;
+  --line:#e2e7ef;
+  --accent:#5149c6;
   --purple:#eeeaff;
   --green:#159b70;
   --greenbg:#e8f7f1;
@@ -118,7 +118,11 @@ button { cursor:pointer; }
   border-radius:10px;
   font-size:12px;
   font-weight:700;
+  transition:background .15s,border-color .15s,color .15s,transform .15s,box-shadow .15s;
 }
+
+.btn:not(:disabled):hover { border-color:#c8cde0;box-shadow:0 3px 10px #1723380d;transform:translateY(-1px); }
+.btn.primary:not(:disabled):hover { background:#443cae;border-color:#443cae; }
 
 .btn.primary,.auth-submit {
   background:var(--accent);
@@ -127,6 +131,24 @@ button { cursor:pointer; }
 }
 
 .btn:disabled { opacity:.5;cursor:not-allowed; }
+
+.analysis-filters { display:flex;align-items:end;gap:10px;flex-wrap:wrap;padding:16px;margin-bottom:17px;background:#fff;border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow); }
+.analysis-filters .field { min-width:145px;flex:1;margin:0; }
+.analysis-filters .field input,.analysis-filters .field select { height:40px;padding:0 10px;background:#fff; }
+.report-fields { flex:1 0 100%;border-top:1px solid var(--line);padding-top:10px;margin-top:2px; }
+.report-fields summary { color:var(--accent);font-size:12px;font-weight:700; }
+.report-field-list { display:flex;gap:8px 18px;flex-wrap:wrap;padding:12px 2px 2px; }
+.report-field { display:flex;align-items:center;gap:7px;color:#455268;font-size:12px; }
+.report-field input { accent-color:var(--accent); }
+.analysis-stats .stat { min-width:0; }
+.analysis-table { margin-top:3px; }
+.analysis-table .table td,.analysis-table .table th { font-size:11px; }
+.print-report { display:none; }
+.nav button { transition:background .15s,color .15s,transform .15s; }
+.nav button.active { background:#5148b7;box-shadow:inset 3px 0 #c8c3ff; }
+.card { transition:box-shadow .15s,border-color .15s; }
+.table th { color:#667289;background:#f8f9fc; }
+.pill { letter-spacing:.1px; }
 
 .auth-submit {
   width:100%;
@@ -583,6 +605,8 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
   .head { display:block; }
   .actions { margin-top:13px; }
   .topright #currentAdminEmail { display:none; }
+  .analysis-filters .field { min-width:calc(50% - 8px); }
+  .analysis-filters>.btn { flex:1; }
 }
 
 @media(max-width:420px) {
@@ -690,6 +714,10 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
         <svg class="navicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 14 9l6 3-6 2-2 7-2-7-6-2 6-3 2-6Z"/></svg>Bonos de asistencia
       </button>
 
+      <button data-page="analisis">
+        <svg class="navicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-5 5"/><path d="M15 9h4v4"/></svg>Análisis
+      </button>
+
       <div class="navlabel">Sistema</div>
 
       <button data-page="configuracion">
@@ -740,11 +768,27 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="./app.js?v=20261115-1"></script>
+<script src="./app.js?v=20261115-2"></script>
 
 <!-- CONEXIÓN CON SUPABASE -->
 <script src="./supabase-config.js"></script>
-<script type="module" src="./auth.js?v=20261115-1"></script>
+<script type="module" src="./auth.js?v=20261115-2"></script>
+
+<style>
+@media print {
+  @page { size: A4 landscape; margin: 14mm; }
+  body * { visibility: hidden !important; }
+  #printReport, #printReport * { visibility: visible !important; }
+  #printReport { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 0; color: #172338; background: white; font: 10pt Arial, sans-serif; }
+  #printReport h1 { font-size: 20pt; margin: 8px 0; }
+  #printReport p { margin: 5px 0; color: #4b5565; }
+  #printReport .print-brand { font-size: 9pt; font-weight: bold; letter-spacing: 1.5px; color: #5145cd; }
+  #printReport table { width: 100%; border-collapse: collapse; margin-top: 14px; }
+  #printReport th, #printReport td { border-bottom: 1px solid #dfe3ea; padding: 7px 6px; text-align: left; vertical-align: top; }
+  #printReport th { background: #f1f3f8; font-size: 8pt; text-transform: uppercase; }
+  #printReport footer { margin-top: 16px; color: #697386; font-size: 8pt; }
+}
+</style>
 
 </body>
 </html>
