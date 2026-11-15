@@ -19,6 +19,8 @@ Los pagos previstos por primera nómina mensual completa se generan una sola vez
 
 El apartado Análisis permite filtrar registros por fechas, área y sociedad, seleccionar campos y usar la opción de impresión del navegador para guardar el informe en PDF.
 
+La importación de trabajadores busca encabezados compatibles en todas las hojas del Excel, acepta fechas de Excel y fechas de texto en formato español o estadounidense, detecta duplicados y permite asignar sociedades nuevas o con otro nombre al catálogo antes de guardar. La navegación agrupa las áreas de personas y pagos, manteniendo sus datos y operaciones en las pestañas de cada área.
+
 ## Publicación
 
 El workflow `.github/workflows/deploy.yml` publica la rama `main` en GitHub Pages. La aplicación se sirve desde:
