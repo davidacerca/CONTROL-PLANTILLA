@@ -22,8 +22,27 @@ select distinct btrim(company) from public.workers
 where company is not null and btrim(company) <> ''
 on conflict do nothing;
 insert into public.societies(name) values
-  ('About Room'), ('Eurodelta SL'), ('Elevate ventrures')
+  ('About Room'), ('Eurodelta SL'), ('ELEVATE VENTURES')
 on conflict do nothing;
+
+-- Corrige la errata histórica en el catálogo y conserva las fichas asociadas.
+do $$
+declare old_name text; target_name text;
+begin
+  select name into old_name from public.societies
+    where lower(btrim(name)) = lower('Elevate ventrures') limit 1;
+  if old_name is not null then
+    select name into target_name from public.societies
+      where lower(btrim(name)) = lower('ELEVATE VENTURES') limit 1;
+    if target_name is null then
+      update public.societies set name='ELEVATE VENTURES', updated_at=now()
+        where name=old_name;
+    else
+      update public.workers set company=target_name where company=old_name;
+      delete from public.societies where name=old_name;
+    end if;
+  end if;
+end $$;
 
 -- Normaliza solo espacios y mayúsculas del catálogo para enlazar las fichas.
 update public.workers w set company=s.name
