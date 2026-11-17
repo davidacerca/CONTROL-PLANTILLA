@@ -11,19 +11,15 @@ Aplicación administrativa privada publicada con GitHub Pages y conectada a Supa
 
 ## Base de datos
 
-En una instalación nueva, crea primero `public.workers` con `supabase/workers.sql`, ejecuta después `supabase/acerca-modules.sql`, `supabase/acerca-payroll-analysis.sql`, `supabase/acerca-partner-worker-links.sql`, `supabase/acerca-workflow-updates.sql`, `supabase/acerca-monthly-bonus.sql`, `supabase/acerca-payment-sync.sql` y `supabase/acerca-audit-log.sql` desde Supabase SQL Editor. Los scripts son idempotentes y conservan los registros existentes. La aplicación requiere las políticas RLS activas.
+En una instalación nueva, crea primero `public.workers` con `supabase/workers.sql`, ejecuta después `supabase/acerca-modules.sql`, `supabase/acerca-payroll-analysis.sql`, `supabase/acerca-partner-worker-links.sql` y `supabase/acerca-workflow-updates.sql` desde Supabase SQL Editor. Los scripts son idempotentes y conservan los registros existentes. La aplicación requiere las políticas RLS activas.
 
 El esquema incluye sociedades editables, trabajadores, vacaciones, permisos y ausencias, incidencias, partners, horas extra y pagos. Las fichas de trabajadores no se borran desde el cliente; se marca la fecha de baja para conservar el historial. Los periodos de vacaciones sí se pueden eliminar desde su detalle, con confirmación.
 
 Los pagos previstos por primera nómina mensual completa se generan una sola vez. La persona referida debe estar activa hasta el último día del mes. El pago de formación se muestra sin cuantía; cada incentivo Partner de 100 € se asigna al empleado referente. Se fechan al último día de su mes de nómina y pasan por Próximo, Pendiente y Pasado según el mes actual. Los pagos no realizados se pueden trasladar a Pagos pendientes.
 
-La aplicación sincroniza estas previsiones con la función de Supabase `sync_acerca_payment_obligations()`, para que el cálculo sea central y repetible entre sesiones.
-
 En Partners se migran los referentes antiguos al ID de trabajador solo cuando el nombre identifica una única ficha. Las referencias no resueltas se pueden vincular manualmente. El filtro temporal muestra el mes en que vence la primera nómina completa.
 
-Vacaciones se reparten por año natural usando los días del intervalo que caen dentro de cada año. El bono de asistencia se calcula por mes natural: tres días computables lo hacen perder ese mes y el cómputo se reinicia al siguiente. Suma fechas únicas en ausencias computables no retribuidas, así que los intervalos y registros solapados no duplican días. Las recuperaciones se guardan por mes.
-
-El historial de cambios registra altas, modificaciones y eliminaciones con el usuario que las realizó. Se consulta desde Configuración. Los listados muestran 50 registros por página y admiten búsqueda de texto en la vista actual.
+Vacaciones se reparten por año natural usando los días del intervalo que caen dentro de cada año. El bono de asistencia suma fechas únicas en ausencias computables no retribuidas, así que los intervalos y registros solapados no duplican días.
 
 Horas extra se pueden registrar desde un Excel con las columnas AGENTE, SOCIEDAD, Fecha y Horas; al seleccionar el archivo, las filas válidas se importan y se deduplican automáticamente. Los importes son opcionales. Bonos de asistencia se reconocen por defecto y se pueden recuperar en caso de excepción.
 
