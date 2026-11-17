@@ -253,6 +253,16 @@ body.acerca-authenticated .auth-screen { display:none!important; }
 .worker-status-filter { display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:12px;white-space:nowrap; }
 .worker-status-filter select { border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);padding:7px 9px; }
 .vacation-search { max-width:520px;margin-bottom:14px; }
+.vacation-search-row { display:flex;align-items:flex-end;gap:12px;margin-bottom:14px;flex-wrap:wrap; }
+.vacation-search-row .vacation-search { flex:1 1 360px;max-width:520px;margin-bottom:0; }
+.vacation-search-row > .btn { margin-bottom:14px;white-space:nowrap; }
+.vacation-overview { margin-bottom:14px; }
+.vacation-overview .tablewrap { max-height:520px;overflow:auto; }
+.vacation-overview .table { min-width:980px; }
+.vacation-overview small { color:var(--muted);font-weight:400; }
+.overview-heading { display:flex;align-items:center;justify-content:space-between;margin-bottom:12px; }
+.overview-heading h3 { margin:0 0 4px; }
+.overview-heading p { margin:0;color:var(--muted);font-size:12px; }
 .vacation-summary { display:flex;align-items:flex-start;gap:24px; }
 .vacation-summary h2 { margin:4px 0;font-size:20px; }
 .vacation-summary .grid { flex:1;grid-template-columns:repeat(auto-fit,minmax(125px,1fr)); }
@@ -790,7 +800,7 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="./app.js?v=20261117-3"></script>
+<script src="./app.js?v=20261117-4"></script>
 
 <!-- CONEXIÓN CON SUPABASE -->
 <script src="./supabase-config.js"></script>
