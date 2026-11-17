@@ -113,6 +113,7 @@ create table if not exists public.incident_records (
 create table if not exists public.partner_records (
   id uuid primary key default gen_random_uuid(),
   referrer_name text not null,
+  employee_worker_id uuid references public.workers(id) on delete set null,
   referred_name text not null,
   incorporation_date date not null,
   incentive numeric(12,2) not null default 0,

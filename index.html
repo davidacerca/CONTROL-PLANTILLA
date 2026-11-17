@@ -248,6 +248,23 @@ body.acerca-authenticated .auth-screen { display:none!important; }
 .worker-suggestion:hover,.worker-suggestion:focus-visible { background:#f1f0ff;color:#3f389f; }
 .worker-suggestion small,.worker-no-match { color:var(--muted);font-size:11px; }
 .worker-no-match { padding:10px; }
+.worker-status-filter { display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:12px;white-space:nowrap; }
+.worker-status-filter select { border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);padding:7px 9px; }
+.vacation-search { max-width:520px;margin-bottom:14px; }
+.vacation-summary { display:flex;align-items:flex-start;gap:24px; }
+.vacation-summary h2 { margin:4px 0;font-size:20px; }
+.vacation-summary .grid { flex:1;grid-template-columns:repeat(auto-fit,minmax(125px,1fr)); }
+.calendar button.hasvac { position:relative; }
+.calendar button.hasvac small { position:absolute;right:2px;top:1px;font-size:9px;line-height:1;color:#fff; }
+.calendar button.hasvac.hasvac-week { background:#eeeaff;color:#5145c7; }
+.calendar button.hasvac.hasvac-single { background:#e2f5f2;color:#007966; }
+.calendar button.hasvac.hasvac-mixed { background:linear-gradient(135deg,#eeeaff 50%,#e2f5f2 50%);color:#29354a; }
+.calendar-legend { display:flex;flex-wrap:wrap;gap:14px;margin-top:12px;color:var(--muted);font-size:11px; }
+.calendar-legend span { display:inline-flex;align-items:center;gap:6px; }
+.calendar-legend i { width:11px;height:11px;border-radius:3px;display:inline-block; }
+.calendar-legend .week { background:#eeeaff; }
+.calendar-legend .single { background:#e2f5f2; }
+.calendar-legend .mixed { background:linear-gradient(135deg,#eeeaff 50%,#e2f5f2 50%); }
 .profile-summary { display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px;background:#f7f8fc;border:1px solid var(--line);border-radius:12px;margin-bottom:14px; }
 .profile-summary h3 { margin:0 0 4px;font-size:16px; }
 .profile-summary p { margin:3px 0;color:var(--muted);font-size:12px; }
@@ -642,6 +659,8 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
 @media(max-width:420px) {
   .stats { grid-template-columns:1fr; }
   .auth-card { padding:25px; }
+  .worker-status-filter { gap:4px;font-size:10px; }
+  .worker-status-filter select { max-width:112px;padding:6px 5px;font-size:10px; }
 }
 </style>
 </head>
@@ -739,6 +758,7 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
       </div>
 
       <div class="topright">
+        <div id="workerStatusFilter"></div>
         <div class="avatar">AD</div>
         <span id="currentAdminEmail">Administración</span>
         <button id="logoutButton" class="signout-btn" type="button">
@@ -768,11 +788,11 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="./app.js?v=20261115-7"></script>
+<script src="./app.js?v=20261117-1"></script>
 
 <!-- CONEXIÓN CON SUPABASE -->
 <script src="./supabase-config.js"></script>
-<script type="module" src="./auth.js?v=20261115-7"></script>
+<script type="module" src="./auth.js?v=20261117-1"></script>
 
 <style>
 @media print {
