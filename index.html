@@ -252,6 +252,10 @@ body.acerca-authenticated .auth-screen { display:none!important; }
 .worker-no-match { padding:10px; }
 .worker-status-filter { display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:12px;white-space:nowrap; }
 .worker-status-filter select { border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);padding:7px 9px; }
+.table-pagination { display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:12px 16px;border-top:1px solid var(--line);font-size:11px;color:var(--muted); }
+.table-pagination .btn { padding:7px 10px; }
+.audit-json { max-height:240px;overflow:auto;padding:12px;border-radius:10px;background:#f5f6fa;color:#26334a;font-size:11px;white-space:pre-wrap;word-break:break-word; }
+#globalSearch { width:min(24vw,260px);min-width:160px;padding:8px 11px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);font-size:12px; }
 .vacation-search { max-width:520px;margin-bottom:14px; }
 .vacation-summary { display:flex;align-items:flex-start;gap:24px; }
 .vacation-summary h2 { margin:4px 0;font-size:20px; }
@@ -633,6 +637,9 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
 }
 
 @media(max-width:700px) {
+  .topbar { height:auto;min-height:58px;flex-wrap:wrap;gap:8px;padding:8px 12px; }
+  .topright { gap:7px;flex-wrap:wrap;justify-content:flex-end; }
+  #globalSearch { width:155px;min-width:120px; }
   .sidebar {
     width:260px;
     transform:translateX(-100%);
@@ -655,6 +662,8 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
   .section-tab { white-space:nowrap; }
   .profile-grid { grid-template-columns:1fr; }
   .profile-summary { align-items:flex-start;flex-direction:column; }
+  .vacation-summary { flex-direction:column;gap:12px; }
+  .table-pagination { justify-content:center;flex-wrap:wrap;gap:6px; }
   .import-company { grid-template-columns:1fr;gap:5px; }
 }
 
@@ -663,6 +672,7 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
   .auth-card { padding:25px; }
   .worker-status-filter { gap:4px;font-size:10px; }
   .worker-status-filter select { max-width:112px;padding:6px 5px;font-size:10px; }
+#globalSearch { width:145px;min-width:100px;padding:7px;font-size:11px; }
 }
 </style>
 </head>
@@ -760,6 +770,7 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
       </div>
 
       <div class="topright">
+        <input id="globalSearch" type="search" placeholder="Buscar en la vista…" aria-label="Buscar en la tabla actual">
         <div id="workerStatusFilter"></div>
         <div class="avatar">AD</div>
         <span id="currentAdminEmail">Administración</span>
@@ -790,11 +801,11 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="./app.js?v=20261117-3"></script>
+<script src="./app.js?v=20261117-6"></script>
 
 <!-- CONEXIÓN CON SUPABASE -->
 <script src="./supabase-config.js"></script>
-<script type="module" src="./auth.js?v=20261117-3"></script>
+<script type="module" src="./auth.js?v=20261117-6"></script>
 
 <style>
 @media print {
@@ -808,6 +819,8 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
   #printReport table { width: 100%; border-collapse: collapse; margin-top: 14px; }
   #printReport th, #printReport td { border-bottom: 1px solid #dfe3ea; padding: 7px 6px; text-align: left; vertical-align: top; }
   #printReport th { background: #f1f3f8; font-size: 8pt; text-transform: uppercase; }
+  #printReport thead { display:table-header-group; }
+  #printReport tr { break-inside:avoid;page-break-inside:avoid; }
   #printReport footer { margin-top: 16px; color: #697386; font-size: 8pt; }
 }
 </style>
