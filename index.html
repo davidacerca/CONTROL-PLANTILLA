@@ -123,6 +123,8 @@ button { cursor:pointer; }
 
 .btn:not(:disabled):hover { border-color:#c8cde0;box-shadow:0 3px 10px #1723380d;transform:translateY(-1px); }
 .btn.primary:not(:disabled):hover { background:#443cae;border-color:#443cae; }
+.btn.danger { color:#a3333b;border-color:#f0c4c7;background:#fffafa; }
+.btn.danger:not(:disabled):hover { color:#84252d;border-color:#df9da2;background:#fff1f2; }
 
 .btn.primary,.auth-submit {
   background:var(--accent);
@@ -788,11 +790,11 @@ button:focus-visible,[role="button"]:focus-visible,input:focus-visible,select:fo
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="./app.js?v=20261117-1"></script>
+<script src="./app.js?v=20261117-2"></script>
 
 <!-- CONEXIÓN CON SUPABASE -->
 <script src="./supabase-config.js"></script>
-<script type="module" src="./auth.js?v=20261117-1"></script>
+<script type="module" src="./auth.js?v=20261117-2"></script>
 
 <style>
 @media print {
